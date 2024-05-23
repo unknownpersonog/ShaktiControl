@@ -17,8 +17,8 @@
 }
 
 body {
-  background-color: #cccccc;
-  background-image: url("../../public/background.jpg");
+  background-color: #000000;
+  background-image: url("https://files.unknownvps.eu.org/get/file/unknownvps-bg.jpg");
   background-repeat:no-repeat;
   background-size:cover;
 }
@@ -26,5 +26,5 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
-  }
+  } 
 }
