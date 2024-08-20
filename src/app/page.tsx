@@ -2,17 +2,18 @@
 import Login from '@/components/login';
 import { redirect } from 'next/navigation';
 import { auth } from '../../auth';
-import makeRequest from '@/functions/api/makeRequest';
+import { makeRequest } from '@/functions/api/makeRequest';
+import LoadingComponent from '@/components/loading';
 
 export default async function Index() {
   const session = await auth();
   if (session) {
     const email = session.user?.email
-    let user = await makeRequest('GET', '/users/info/' + email)
-
+    let user = await makeRequest('GET', process.env.API_ENDPOINT + '/users/info/' + email)
+    if (!user) <LoadingComponent />
     try {
       if (user && user.response.status === 404) {
-        const res = await makeRequest('POST', '/users/create', { email, method: "Google" })
+        const res = await makeRequest('POST', process.env.API_ENDPOINT + '/users/create', { email, method: "Google" })
         if (!res || !(res.response.status === 400)) console.error(res ? res.message : "Server Error");
         
         if (res && res.response.status === 200) {
@@ -24,7 +25,6 @@ export default async function Index() {
       
       return <Login />
     }
-    
    return (
       redirect('/dashboard')
    )

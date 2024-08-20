@@ -4,7 +4,7 @@ export default function LoadingComponent() {
       
       <div className="flex items-center justify-center border p-4 my-2 rounded-lg backdrop-blur-lg border-blue-600 backdrop-brightness-125">
         <p className="text-white text-lg font-mono animate-spin">. </p>
-        <p className="text-white text-lg font-mono animate-pulse px-2"> Loading</p>
+        <p className="text-white text-lg font-mono animate-pulse px-2"> Loading a wonderful experience</p>
       </div>
     </main>
   );

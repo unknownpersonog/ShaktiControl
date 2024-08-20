@@ -11,8 +11,8 @@ import Image from "next/image";
  // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
-  title: "UnknownVPS",
-  description: "Free VPS Service",
+  title: "ShaktiCtrl • UnknownVPS",
+  description: "Service management service by and for UnknownVPS.",
 };
 
 export default function RootLayout({

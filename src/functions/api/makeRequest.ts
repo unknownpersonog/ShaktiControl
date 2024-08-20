@@ -1,9 +1,7 @@
-import fetch, { Headers, Response } from 'node-fetch';
-
 interface Data {
     message?: string;
     error?: string;
-    status?: number,
+    status?: number;
     [key: string]: any;
 }
 
@@ -14,42 +12,83 @@ interface RequestResult {
     response: Response;
 }
 
-const headers: Headers = new Headers({
-    'X-Access-Token': process.env.API_KEY as string,
-    'Content-Type': 'application/json'
-});
-
-async function makeRequest(method: string, endpoint: string, data?: any): Promise<RequestResult | void> {
-    if (method === 'GET' && data) {
-        return console.log('Error: Data cannot be sent with a GET request');
-    }
-
-    if (data) {
-        headers.set('Content-Type', 'application/json');
-    }
-
-    const response = await fetch(`${process.env.API_ENDPOINT}${endpoint}`, {
-        method: method,
-        headers: headers,
-        body: data ? JSON.stringify(data) : null
+export async function makeRequest(method: 'GET' | 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: any): Promise<RequestResult | void> {
+    const headers = new Headers({
+        'X-Access-Token': process.env.API_KEY as string,
+        'Content-Type': 'application/json',
     });
 
     try {
-        if (response.headers.get('content-type')?.includes('application/json')) {
-            const data: any = await response.json();
-            if (response.status === 200) {
-                return {message: data.message, data: data, headers: response.headers, response: response}
-            }
-            else {
-                return {message: data.error, data: data, headers: response.headers, response: response}
-            }
+        const response = await fetch(`${endpoint}`, {
+            method: method,
+            headers: headers,
+            body: data ? JSON.stringify(data) : undefined,
+        });
+
+        const result = (await response.json()) as Data;
+
+        if (response.ok) {
+            return {
+                message: result.message || 'Request was successful',
+                data: result,
+                headers: response.headers,
+                response: response,
+            };
         } else {
-            const text: string = await response.text();
-            return {message: text, data: {}, headers: response.headers, response: response}
+            return {
+                message: result.error || 'Request failed',
+                data: result,
+                headers: response.headers,
+                response: response,
+            };
         }
-    } catch (err) {
-        return console.log('Internal Server Error (Probably Faulty URL)');
+    } catch (error) {
+        console.error('Error making request:', error);
+        return {
+            message: 'Internal Server Error',
+            data: {},
+            headers: new Headers(),
+            response: {} as Response,
+        };
     }
 }
 
-export default makeRequest;
+// Ping API
+export async function pingAPI(): Promise<RequestResult | void> {
+    return makeRequest('GET', '/ping');
+}
+
+// Create User
+interface CreateUserParams {
+    email: string;
+    discordId: string;
+}
+
+export async function createUser(params: CreateUserParams): Promise<RequestResult | void> {
+    return makeRequest('POST', '/users/create', params);
+}
+
+// Verify User by Email
+interface VerifyUserByEmailParams {
+    email: string;
+    discordId: string;
+}
+
+export async function verifyUserByEmail(params: VerifyUserByEmailParams): Promise<RequestResult | void> {
+    return makeRequest('POST', '/users/verify/mail', params);
+}
+
+// Verify User by Token
+interface VerifyUserByTokenParams {
+    token: string;
+    discordId: string;
+}
+
+export async function verifyUserByToken(params: VerifyUserByTokenParams): Promise<RequestResult | void> {
+    return makeRequest('POST', '/users/verify/token', params);
+}
+
+// Get User Info
+export async function getUserInfo(discordId: string): Promise<RequestResult | void> {
+    return makeRequest('GET', `/users/info/${discordId}`);
+}
