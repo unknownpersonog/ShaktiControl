@@ -10,7 +10,7 @@ import AdminDashboard from '@/components/adminDash';
 import Servers from '@/components/server';
 
 export default function Page() {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const { status, data: session } = useSession({
     required: true,
@@ -27,6 +27,7 @@ export default function Page() {
           setUserData(data);
         } catch (error) {
           console.error("Failed to fetch user data:", error);
+          setUserData(null);
         } finally {
           setLoading(false);
         }
@@ -52,7 +53,7 @@ export default function Page() {
   if (path === '/servers') {
     return <Servers />;
   }
-  if (path === '/admin' && userData.data.admin) {
+  if (path === '/admin' && userData?.data?.admin) {
     return <AdminDashboard userData={userData}/>;
   }
 

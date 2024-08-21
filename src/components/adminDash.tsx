@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { makeRequest } from '@/functions/api/makeRequest';
 import { ChevronDown, ChevronUp, Search, Trash, Mail } from 'lucide-react';
@@ -16,7 +18,15 @@ interface SortConfig {
   direction: 'ascending' | 'descending';
 }
 
-export default function AdminDashboard(userData: any) {
+interface AdminDashboardProps {
+  userData: {
+    data: {
+      admin: boolean;
+    };
+  } | null;
+}
+
+export default function AdminDashboard({ userData }: AdminDashboardProps) {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,16 +38,14 @@ export default function AdminDashboard(userData: any) {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const data = await makeRequest('GET', '/api/uvapi/users/list');
-        console.log('Received data:', data);
-
+        const data: unknown = await makeRequest('GET', '/api/uvapi/users/list');
         let parsedUsers: User[] = [];
         if (Array.isArray(data)) {
-          parsedUsers = data;
+          parsedUsers = data as User[];
         } else if (typeof data === 'object' && data !== null) {
           const possibleArrays = Object.values(data).filter(Array.isArray);
           if (possibleArrays.length > 0) {
-            parsedUsers = possibleArrays[0];
+            parsedUsers = possibleArrays[0] as User[];
           } else {
             parsedUsers = [data as User];
           }
@@ -60,7 +68,7 @@ export default function AdminDashboard(userData: any) {
   }, []);
 
   const handleSort = (key: keyof User) => {
-    let direction = 'ascending';
+    let direction: 'ascending' | 'descending' = 'ascending';
     if (sortConfig.key === key && sortConfig.direction === 'ascending') {
       direction = 'descending';
     }
@@ -71,10 +79,10 @@ export default function AdminDashboard(userData: any) {
     let sortableUsers = [...users];
     if (sortConfig.key !== null) {
       sortableUsers.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
+        if (a[sortConfig.key!] < b[sortConfig.key!]) {
           return sortConfig.direction === 'ascending' ? -1 : 1;
         }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
+        if (a[sortConfig.key!] > b[sortConfig.key!]) {
           return sortConfig.direction === 'ascending' ? 1 : -1;
         }
         return 0;

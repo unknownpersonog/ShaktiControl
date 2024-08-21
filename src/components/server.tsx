@@ -21,7 +21,7 @@ export default function ServersPage() {
       try {
         const response = await makeRequest("GET", "/api/user/servers");
         if (response?.response.ok) {
-          setServers(response.data);
+          setServers(response.data as Server[]);
         } else {
           console.error('Failed to fetch servers');
         }
@@ -34,7 +34,6 @@ export default function ServersPage() {
 
     fetchServers();
   }, []);
-
   return (
     <div className="flex min-h-screen text-white">
       <Sidebar sidebarOpen={true} setSidebarOpen={() => {}} isAdmin={false} />
