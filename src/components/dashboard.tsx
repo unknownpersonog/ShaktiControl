@@ -133,7 +133,7 @@ export default function Dashboard({ userData, session }: DashboardProps) {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-gray-300">UnID</span>
-                <span className="text-yellow-400">{userData.data._id}</span>
+                <span className="text-yellow-400">{userData.data.unid}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-gray-300">Coins</span>

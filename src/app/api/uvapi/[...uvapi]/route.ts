@@ -3,7 +3,12 @@ import { auth } from '../../../../../auth'; // Adjust the import based on your s
 import type { Session } from 'next-auth';
 
 const API_BASE_URL = process.env.API_ENDPOINT;
-
+async function checkAdmin(session: any) {
+    const info = await proxyRequest(`/users/info/${session.user.email}`, 'GET', undefined, session)
+    if (info.data.admin === 'true') {
+        return true
+    } else return false
+} 
 async function proxyRequest(url: string, method: string, body?: any, session?: Session) {
     const response = await fetch(`${API_BASE_URL}${url}`, {
         method,
@@ -69,23 +74,34 @@ export async function POST(req: NextRequest) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
     }
 
-    const discordId = session.user?.email; // Assuming the email is used as discordId
+    const email = session.user?.email; // Assuming the email is used as discordId
     let apiUrl = '';
 
     switch (true) {
         case url.pathname === '/api/uvapi/users/create':
+            if (!(await checkAdmin(session))) return new Response(JSON.stringify({ message: 'Forbidden' }), { status: 403 });
             apiUrl = '/users/create';
-            body.discordId = discordId; // Add discordId to body if required
-            body.email = discordId;
+            body.email = email;
             body.method = "Google";
             break;
+        case url.pathname === '/api/uvapi/users/delete':
+            if (!(await checkAdmin(session))) return new Response(JSON.stringify({ message: 'Forbidden' }), { status: 403 });
+            // Extract the email to delete from the request body
+            if (!body.email) {
+                return new Response(JSON.stringify({ message: 'Email to delete is required' }), { status: 400 });
+            }
+            apiUrl = '/users/delete';
+            body.email = body.email; // Ensure the email to delete is set in the body
+            break;
         case url.pathname === '/api/uvapi/users/verify/mail':
+            if (!(await checkAdmin(session))) return new Response(JSON.stringify({ message: 'Forbidden' }), { status: 403 });
             apiUrl = '/users/verify/mail';
-            body.discordId = discordId; // Add discordId to body if required
+            body.discordId = email; // Add discordId to body if required
             break;
         case url.pathname === '/api/uvapi/users/verify/token':
+            if (!(await checkAdmin(session))) return new Response(JSON.stringify({ message: 'Forbidden' }), { status: 403 });
             apiUrl = '/users/verify/token';
-            body.discordId = discordId; // Add discordId to body if required
+            body.discordId = email; // Add discordId to body if required
             break;
 
         default:
