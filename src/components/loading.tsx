@@ -1,11 +1,9 @@
+import { RefreshCw } from "lucide-react";
+
 export default function LoadingComponent() {
   return (
-    <main className="min-h-screen content-center items-center justify-center p-5">
-      
-      <div className="flex items-center justify-center border p-4 my-2 rounded-lg backdrop-blur-lg border-blue-600 backdrop-brightness-125">
-        <p className="text-white text-lg font-mono animate-spin">. </p>
-        <p className="text-white text-lg font-mono animate-pulse px-2"> Loading a wonderful experience</p>
-      </div>
-    </main>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <RefreshCw className="animate-spin h-8 w-8 text-purple-500" />
+    </div>
   );
 }

@@ -189,7 +189,7 @@ export default function AdminDashboard({ userData }: AdminDashboardProps) {
       <Sidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
-        isAdmin={userData?.data.admin === true}
+        isAdmin={true}
       />
 
       <div className="flex-1 flex flex-col overflow-hidden">
