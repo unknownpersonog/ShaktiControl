@@ -1,26 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { 
-  Home, Server, BarChart2, Settings, Menu, X, 
-  Mail, Calendar, Users, Briefcase, Globe, ChevronLeft, ChevronRight
-} from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
 import { makeRequest } from '@/functions/api/makeRequest';
-import LoadingComponent from './loading';
 import Sidebar from './sidebar';
-
-const sidebarItems = [
-  { name: 'Dashboard', icon: Home },
-  { name: 'Servers', icon: Server },
-  { name: 'Analytics', icon: BarChart2 },
-  { name: 'Messages', icon: Mail },
-  { name: 'Calendar', icon: Calendar },
-  { name: 'Users', icon: Users },
-  { name: 'Projects', icon: Briefcase },
-  { name: 'Global Network', icon: Globe },
-  { name: 'Settings', icon: Settings },
-];
+import debounce from 'lodash.debounce';
 
 const borderColors = [
   'border-pink-500',
@@ -37,19 +20,33 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ userData, session }: DashboardProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [serverStatus, setServerStatus] = useState({
-    API: 'Offline'
-  });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [serverStatus, setServerStatus] = useState({ API: 'Offline' });
+  const [isMobile, setIsMobile] = useState(false);
+
+  const checkMobile = useCallback(
+    debounce(() => {
+      setIsMobile(window.innerWidth < 768);
+    }, 200),
+    []
+  );
+
+  useEffect(() => {
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [checkMobile]);
 
   useEffect(() => {
     const fetchServerStatus = async () => {
       try {
         const response = await makeRequest("GET", "/api/uvapi/ping");
         if (response?.response.ok) {
-          setServerStatus({
+          setServerStatus(prevStatus => ({
+            ...prevStatus,
             API: "Online"
-          });
+          }));
         } else {
           console.error('Failed to fetch server status');
         }
@@ -63,20 +60,18 @@ export default function Dashboard({ userData, session }: DashboardProps) {
 
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
       <Sidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
         isAdmin={userData.data.admin === "true"}
       />
 
-      {/* Main content */}
-      <main className="flex-1 p-6 md:p-10">
+      <main className={`flex-1 p-6 md:p-10 ${isMobile ? 'pt-20' : ''}`}>
         <header className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-purple-300">Welcome, {session.name}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-purple-300">Welcome, {session.name}</h1>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Server Status */}
           <div className={`p-6 rounded-lg bg-opacity-50 border backdrop-blur-md ${borderColors[0]}`}>
             <h3 className="text-xl font-semibold mb-4 text-pink-300">Server Status</h3>
@@ -100,7 +95,6 @@ export default function Dashboard({ userData, session }: DashboardProps) {
             </div>
           </div>
 
-
           {/* Resource Usage */}
           <div className={`p-6 rounded-lg bg-opacity-50 border backdrop-blur-md ${borderColors[1]}`}>
             <h3 className="text-xl font-semibold mb-4 text-purple-300">Resource Usage</h3>
@@ -119,7 +113,7 @@ export default function Dashboard({ userData, session }: DashboardProps) {
             </div>
           </div>
 
-          {/* Network Traffic */}
+          {/* Your Profile */}
           <div className={`p-6 rounded-lg bg-opacity-50 border backdrop-blur-md ${borderColors[2]}`}>
             <h3 className="text-xl font-semibold mb-4 text-indigo-300">Your Profile</h3>
             <div className="space-y-2">
@@ -141,6 +135,7 @@ export default function Dashboard({ userData, session }: DashboardProps) {
               </div>
             </div>
           </div>
+
           {/* Quick Actions */}
           <div className={`p-6 rounded-lg bg-opacity-50 border backdrop-blur-md ${borderColors[3]}`}>
             <h3 className="text-xl font-semibold mb-4 text-teal-300">Quick Actions</h3>
@@ -155,8 +150,6 @@ export default function Dashboard({ userData, session }: DashboardProps) {
               ))}
             </div>
           </div>
-
-          
 
           {/* Recent Messages */}
           <div className={`p-6 rounded-lg bg-opacity-50 border backdrop-blur-md ${borderColors[4]}`}>

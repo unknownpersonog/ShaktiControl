@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Home, Server, BarChart2, Settings, ChevronLeft, ChevronRight,
-  Mail, Calendar, Users, Briefcase, Globe, X, Shield
+  Mail, Calendar, Users, Briefcase, Globe, X, Shield, Menu
 } from 'lucide-react';
 
 const sidebarItems = [
@@ -22,67 +22,95 @@ const sidebarItems = [
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
-  isAdmin: boolean; // New prop to check if the user is an admin
+  isAdmin: boolean;
 }
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen, isAdmin }: SidebarProps) {
-  // Add admin item to the sidebar items if the user is an admin
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const allSidebarItems = isAdmin
     ? [...sidebarItems, { name: 'Admin', icon: Shield }]
     : sidebarItems;
 
   return (
-    <aside
-      className={`
-        ${sidebarOpen ? 'w-64' : 'w-24'}
-        transition-all duration-300 ease-in-out
-        bg-opacity-80 backdrop-blur-lg border-r border-purple-500
-        flex flex-col
-      `}
-    >
-      <div className="p-6 flex-grow">
-        <div className="flex justify-between items-center mb-8">
-          {sidebarOpen && <h2 className="text-2xl font-bold text-purple-300">UnknownVPS</h2>}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white p-1 rounded-full hover:bg-purple-700 transition-colors"
-          >
-            {sidebarOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
-          </button>
-        </div>
-        <nav>
-          <ul className="space-y-2">
-            {allSidebarItems.map((item) => (
-              <li key={item.name}>
-                <Link
-                  href={`/${item.name.toLowerCase()}`}
-                  className={`
-                    flex items-center py-2 px-4 rounded text-gray-300
-                    hover:bg-purple-700 hover:text-white transition-colors
-                    ${!sidebarOpen && 'justify-center'}
-                  `}
-                  title={item.name}
-                >
-                  <item.icon size={18} className={sidebarOpen ? 'mr-3' : ''} />
-                  {sidebarOpen && item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-      <div className="p-4">
-        <Link
-          href="/api/auth/signout"
-          className={`
-            flex items-center justify-center py-2 px-4 rounded
-            text-purple-300 border border-purple-500
-            hover:bg-purple-700 hover:text-white transition-colors
-          `}
+    <>
+      {/* Mobile menu button */}
+      {isMobile && (
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="fixed top-4 left-4 z-50 p-2 bg-purple-600 rounded-full text-white"
         >
-          {sidebarOpen ? 'Logout' : <X size={18} />}
-        </Link>
-      </div>
-    </aside>
+          {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`
+          ${isMobile ? (sidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''}
+          ${isMobile ? 'fixed inset-y-0 left-0 z-40' : 'relative'}
+          transition-all duration-300 ease-in-out
+          bg-opacity-80 backdrop-blur-lg border-r border-purple-500
+          flex flex-col
+          ${isMobile ? 'w-64' : sidebarOpen ? 'w-64' : 'w-24'}
+          overflow-y-auto
+        `}
+      >
+        <div className="p-6 flex-grow">
+          <div className="flex justify-between items-center mb-8">
+            {(sidebarOpen || isMobile) && <h2 className="text-2xl font-bold text-purple-300">UnknownVPS</h2>}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="text-white p-1 rounded-full hover:bg-purple-700 transition-colors"
+            >
+              {sidebarOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
+            </button>
+          </div>
+          <nav>
+            <ul className="space-y-2">
+              {allSidebarItems.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    href={`/${item.name.toLowerCase()}`}
+                    className={`
+                      flex items-center py-2 px-4 rounded text-gray-300
+                      hover:bg-purple-700 hover:text-white transition-colors
+                      ${!sidebarOpen && !isMobile && 'justify-center'}
+                    `}
+                    title={item.name}
+                  >
+                    <item.icon size={18} className={(sidebarOpen || isMobile) ? 'mr-3' : ''} />
+                    {(sidebarOpen || isMobile) && item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+        <div className="p-4">
+          <Link
+            href="/api/auth/signout"
+            className={`
+              flex items-center justify-center py-2 px-4 rounded
+              text-purple-300 border border-purple-500
+              hover:bg-purple-700 hover:text-white transition-colors
+            `}
+          >
+            {(sidebarOpen || isMobile) ? 'Logout' : <X size={18} />}
+          </Link>
+        </div>
+      </aside>
+    </>
   );
 }

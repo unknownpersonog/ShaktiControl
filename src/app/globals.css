@@ -17,10 +17,14 @@
 }
 
 body {
-  background-color: #000000;
-  background-image: url("https://firebasestorage.googleapis.com/v0/b/unknownvps.appspot.com/o/unknownvps-bg.jpg?alt=media&token=4b26c9c6-e830-4cbb-a9fd-951e78aad2e4");
-  background-repeat:no-repeat;
-  background-size:cover;
+  background: linear-gradient(135deg, #000214, #000428, #001f54, #001c3b);
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  color: #ffffff; /* Ensure text is readable */
+  position: relative;
 }
 
 @layer utilities {

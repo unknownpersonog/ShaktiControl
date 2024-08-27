@@ -8,6 +8,7 @@ import { redirect, usePathname } from 'next/navigation';
 import { makeRequest } from '@/functions/api/makeRequest';
 import AdminDashboard from '@/components/adminDash';
 import Servers from '@/components/server';
+import ProjectManagement from '@/components/projects';
 
 export default function Page() {
   const [userData, setUserData] = useState<any | null>(null);
@@ -53,6 +54,7 @@ export default function Page() {
   if (path === '/servers') {
     return <Servers />;
   }
+
   if (path === '/admin' && userData?.data?.admin) {
     return <AdminDashboard userData={userData}/>;
   }
