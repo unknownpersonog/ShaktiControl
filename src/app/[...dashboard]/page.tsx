@@ -54,7 +54,9 @@ export default function Page() {
   if (path === '/servers') {
     return <Servers />;
   }
-
+  if (path === '/projects') {
+    return <ProjectManagement userData={userData} session={session.user} />;
+  }
   if (path === '/admin' && userData?.data?.admin) {
     return <AdminDashboard userData={userData}/>;
   }

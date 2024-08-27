@@ -293,19 +293,18 @@ export default function AdminDashboard({ userData }: AdminDashboardProps) {
                           className="form-checkbox h-5 w-5 text-purple-600"
                         />
                       </td>
+                      <td className="px-4 py-2">{user.email}</td>
                       <td className="px-4 py-2">
-                        {user.method === 'Google' ? (
+                      {user.method === 'Google' ? (
                           <div className="flex items-center">
                             <img
                               src="/google.png"
                               alt="Google"
                               className="w-5 h-5 mr-2"
                             />
-                            {user.email}
                           </div>
-                        ) : user.email}
+                        ) : 'Invalid'}
                       </td>
-                      <td className="px-4 py-2">{user.method}</td>
                       <td className="px-4 py-2">{format(new Date(user.joinDate), 'yyyy-MM-dd')}</td>
                       <td className="px-4 py-2">{user.unid}</td>
                       <td className="px-4 py-2">{user.coins}</td>
