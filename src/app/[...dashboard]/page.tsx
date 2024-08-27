@@ -9,6 +9,7 @@ import { makeRequest } from '@/functions/api/makeRequest';
 import AdminDashboard from '@/components/adminDash';
 import Servers from '@/components/server';
 import ProjectManagement from '@/components/projects';
+import NotFoundPage from '@/components/404';
 
 export default function Page() {
   const [userData, setUserData] = useState<any | null>(null);
@@ -61,5 +62,5 @@ export default function Page() {
     return <AdminDashboard userData={userData}/>;
   }
 
-  return <div className="text-white">404 Unknown Page: {path}</div>;
+  return <NotFoundPage />;
 }
