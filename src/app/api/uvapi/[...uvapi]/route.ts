@@ -93,6 +93,15 @@ export async function POST(req: NextRequest) {
             apiUrl = '/users/delete';
             body.email = body.email; // Ensure the email to delete is set in the body
             break;
+        case url.pathname === '/api/uvapi/vps/add':
+            if (!(await checkAdmin(session))) return new Response(JSON.stringify({ message: 'Forbidden' }), { status: 403 });
+            // Extract the email to delete from the request body
+            if (!body.email) {
+                return new Response(JSON.stringify({ message: 'Email to delete is required' }), { status: 400 });
+            }
+            apiUrl = '/vps/add';
+            body.email = body.email; // Ensure the email to delete is set in the body
+            break;
         case url.pathname === '/api/uvapi/users/verify/mail':
             if (!(await checkAdmin(session))) return new Response(JSON.stringify({ message: 'Forbidden' }), { status: 403 });
             apiUrl = '/users/verify/mail';
