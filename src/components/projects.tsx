@@ -1,10 +1,8 @@
-'use client';
-
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { makeRequest } from '@/functions/api/makeRequest';
 import Sidebar from './sidebar';
 import debounce from 'lodash.debounce';
-import { Plus } from 'lucide-react'; // Import the Plus icon
+import { Plus, Users, Server, Calendar } from 'lucide-react';
 
 const borderColors = [
   'border-pink-500',
@@ -16,26 +14,46 @@ const borderColors = [
 ];
 
 interface Project {
-  id: string;
+  _id: string;
+  uniqueId: string; // Use uniqueId to match the backend
   name: string;
   description: string;
   users: string[];
-  servers: string[];
+  vps: string[];
+  createdAt?: string;
 }
 
 interface ProjectProps {
-  userData: any;
+  userData: {
+    data: {
+      admin: string;
+      unid: string; // Assuming userData contains the current user's ID
+      email: string; // Added email field
+    };
+  };
   session: any;
+}
+
+function isProject(data: any): data is Project {
+  return typeof data === 'object' &&
+         typeof data._id === 'string' &&
+         typeof data.uniqueId === 'string' && // Check for uniqueId
+         typeof data.name === 'string' &&
+         typeof data.description === 'string' &&
+         Array.isArray(data.users) &&
+         Array.isArray(data.vps);
 }
 
 export default function ProjectManagement({ userData, session }: ProjectProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [projects, setProjects] = useState([
-    { id: '1', name: 'Sample Project', description: 'This is a sample project.', users: ['User1', 'User2'], servers: ['Server1'] }
-  ]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [isMobile, setIsMobile] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [newProject, setNewProject] = useState({ name: '', description: '' });
+  const [newProject, setNewProject] = useState({
+    name: '',
+    description: '',
+    email: userData.data.email // Ensure the email field is initialized correctly
+  });
 
   const checkMobile = useCallback(
     debounce(() => {
@@ -54,11 +72,17 @@ export default function ProjectManagement({ userData, session }: ProjectProps) {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await makeRequest("GET", "/api/uvapi/projects");
+        const response = await makeRequest("GET", "/api/uvapi/projects/list");
         if (response?.response.ok) {
-          // Ensure the response data is an array and cast it to Project[]
-          const data: Project[] = Array.isArray(response.data) ? response.data : [];
-          setProjects(data);
+          const data = response.data;
+          if (Array.isArray(data)) {
+            const userProjects: Project[] = data.filter(project => 
+              isProject(project) && project.users.includes(userData.data.unid)
+            );
+            setProjects(userProjects);
+          } else {
+            console.error('Invalid data format');
+          }
         } else {
           console.error('Failed to fetch projects');
         }
@@ -66,16 +90,41 @@ export default function ProjectManagement({ userData, session }: ProjectProps) {
         console.error('Error fetching projects:', error);
       }
     };
-
+  
     fetchProjects();
-  }, []);
-
+  }, [userData.data.unid]);
+  
   const handleCreateProject = async () => {
-    // Temporarily create a new project for testing
-    const tempProject = { id: Date.now().toString(), name: newProject.name, description: newProject.description, users: [], servers: [] };
-    setProjects([...projects, tempProject]);
-    setNewProject({ name: '', description: '' });
-    setShowForm(false);
+    try {
+      const response = await makeRequest("POST", "/api/uvapi/projects/create", newProject);
+      if (response?.response.ok) {
+        const data = response.data;
+        if (isProject(data) && data.users.includes(userData.data.unid)) {
+          setProjects([...projects, data]);
+          setNewProject({ name: '', description: '', email: userData.data.email });
+          setShowForm(false);
+        } else {
+          console.error('Invalid project data or project not assigned to current user');
+        }
+      } else {
+        console.error('Failed to create project');
+      }
+    } catch (error) {
+      console.error('Error creating project:', error);
+    }
+  };
+
+  const handleRemoveProject = async (uniqueId: string) => {
+    try {
+      const response = await makeRequest("POST", "/api/uvapi/projects/delete", { projectId: uniqueId });
+      if (response?.response.ok) {
+        setProjects(projects.filter(project => project.uniqueId !== uniqueId));
+      } else {
+        console.error('Failed to remove project');
+      }
+    } catch (error) {
+      console.error('Error removing project:', error);
+    }
   };
 
   return (
@@ -88,7 +137,7 @@ export default function ProjectManagement({ userData, session }: ProjectProps) {
 
       <main className={`flex-1 p-6 md:p-10 ${isMobile ? 'pt-20' : ''}`}>
         <header className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-purple-300">Project Management</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-purple-300">My Projects</h1>
           <button 
             onClick={() => setShowForm(!showForm)} 
             className="py-2 px-4 bg-teal-600 text-white rounded hover:bg-teal-700 transition-colors flex items-center"
@@ -138,32 +187,38 @@ export default function ProjectManagement({ userData, session }: ProjectProps) {
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
-            <div key={project.id} className={`p-6 rounded-lg bg-opacity-50 border backdrop-blur-md ${borderColors[0]}`}>
+          {projects.map((project, index) => (
+            <div key={project._id} className={`p-6 rounded-lg bg-opacity-50 border backdrop-blur-md ${borderColors[index % borderColors.length]}`}>
               <h3 className="text-xl font-semibold mb-4 text-pink-300">{project.name}</h3>
               <p className="text-gray-300 mb-4">{project.description}</p>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Users</span>
-                <span className="text-green-400">{project.users.length}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Servers</span>
-                <span className="text-blue-400">{project.servers.length}</span>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-300 flex items-center"><Users className="mr-2" size={16} /> Users</span>
+                  <span className="text-green-400">{project.users.length}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-300 flex items-center"><Server className="mr-2" size={16} /> VPS</span>
+                  <span className="text-blue-400">{project.vps.length}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-300">Unique ID</span> {/* Change to "Unique ID" */}
+                  <span className="text-yellow-400">{project.uniqueId}</span> {/* Update to use uniqueId */}
+                </div>
+                {project.createdAt && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300 flex items-center"><Calendar className="mr-2" size={16} /> Created</span>
+                    <span className="text-purple-400">{new Date(project.createdAt).toLocaleDateString()}</span>
+                  </div>
+                )}
               </div>
               <button 
-                onClick={() => console.log('Open Project', project.id)} 
-                className="mt-4 py-2 px-4 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                onClick={() => handleRemoveProject(project.uniqueId)} // Update to use uniqueId
+                className="mt-4 py-2 px-4 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
               >
-                Open Project
+                Remove Project
               </button>
             </div>
           ))}
-        </div>
-
-        <div className="mt-8 flex justify-center">
-          <p className="rounded border p-2 text-purple-300 border-purple-500 hover:bg-purple-800 transition-colors">
-            ShaktiCtrl • Made In India 🚀
-          </p>
         </div>
       </main>
     </div>

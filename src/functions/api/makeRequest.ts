@@ -19,13 +19,13 @@ export async function makeRequest(method: 'GET' | 'POST' | 'PUT' | 'DELETE', end
     });
 
     try {
-        const response = await fetch(`${endpoint}`, {
+        const response = await fetch(endpoint, {
             method: method,
             headers: headers,
-            body: data ? JSON.stringify(data) : undefined,
+            body: data && (method === 'POST' || method === 'PUT') ? JSON.stringify(data) : undefined,
         });
 
-        const result = (await response.json()) as Data;
+        const result: Data = await response.json();
 
         if (response.ok) {
             return {
