@@ -15,7 +15,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ session, userData }) 
       <div className="text-gray-300">UnID</div>
       <div className="text-yellow-400">{userData.data.unid}</div>
       <div className="text-gray-300">Coins</div>
-      <div className="text-cyan-400">N/A</div>
+      <div className="text-cyan-400">{userData.data.coins || '0'}</div>
     </div>
   </div>
 );
