@@ -4,7 +4,7 @@ import ProfileDropdown from './ProfileDropdown';
 
 interface HeaderProps {
   session: { name: string };
-  userData: { data: { email: string; unid: string; admin: string } };
+  userData: { data: { email: string; unid: string; admin: string; coins?: number } };
   showProfile: boolean;
   setShowProfile: React.Dispatch<React.SetStateAction<boolean>>;
 }
