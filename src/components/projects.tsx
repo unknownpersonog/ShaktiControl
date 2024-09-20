@@ -73,7 +73,7 @@ export default function ProjectManagement({ userData, session }: ProjectProps) {
     const fetchProjects = async () => {
       try {
         const response = await makeRequest("GET", "/api/uvapi/projects/list");
-        if (response?.response.ok) {
+        if (response?.status === 200) {
           const data = response.data;
           if (Array.isArray(data)) {
             const userProjects: Project[] = data.filter(project => 
@@ -97,7 +97,7 @@ export default function ProjectManagement({ userData, session }: ProjectProps) {
   const handleCreateProject = async () => {
     try {
       const response = await makeRequest("POST", "/api/uvapi/projects/create", newProject);
-      if (response?.response.ok) {
+      if (response?.status === 200) {
         const data = response.data;
         if (isProject(data) && data.users.includes(userData.data.unid)) {
           setProjects([...projects, data]);
@@ -117,7 +117,7 @@ export default function ProjectManagement({ userData, session }: ProjectProps) {
   const handleRemoveProject = async (uniqueId: string) => {
     try {
       const response = await makeRequest("POST", "/api/uvapi/projects/delete", { projectId: uniqueId });
-      if (response?.response.ok) {
+      if (response?.status === 200) {
         setProjects(projects.filter(project => project.uniqueId !== uniqueId));
       } else {
         console.error('Failed to remove project');
