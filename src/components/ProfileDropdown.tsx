@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ProfileDropdownProps {
   session: { name: string };
-  userData: { data: { email: string; unid: string; coins: number } };
+  userData: { data: { email: string; unid: string; coins?: number } };
 }
 
 const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ session, userData }) => (
