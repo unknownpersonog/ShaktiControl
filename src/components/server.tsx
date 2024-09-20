@@ -20,7 +20,7 @@ export default function ServersPage() {
     const fetchServers = async () => {
       try {
         const response = await makeRequest("GET", "/api/user/servers");
-        if (response?.response.ok) {
+        if (response?.status === 200) {
           setServers(response.data as Server[]);
         } else {
           console.error('Failed to fetch servers');

@@ -1,3 +1,5 @@
+import axios, { AxiosResponse, AxiosRequestConfig, AxiosResponseHeaders, RawAxiosResponseHeaders } from 'axios';
+
 interface Data {
     message?: string;
     error?: string;
@@ -6,49 +8,75 @@ interface Data {
 }
 
 interface RequestResult {
-    message?: string;
+    message: string;
     data: Data;
-    headers: Headers;
-    response: Response;
+    headers: Record<string, string>;
+    status: number;
 }
 
-export async function makeRequest(method: 'GET' | 'POST' | 'PUT' | 'DELETE', endpoint: string, data?: any): Promise<RequestResult | void> {
-    const headers = new Headers({
-        'X-Access-Token': process.env.API_KEY as string,
-        'Content-Type': 'application/json',
-    });
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+function convertHeaders(headers: AxiosResponseHeaders | RawAxiosResponseHeaders): Record<string, string> {
+    const result: Record<string, string> = {};
+    for (const [key, value] of Object.entries(headers)) {
+        if (typeof value === 'string') {
+            result[key] = value;
+        } else if (Array.isArray(value)) {
+            result[key] = value.join(', ');
+        }
+    }
+    return result;
+}
+
+export async function makeRequest(
+    method: HttpMethod,
+    endpoint: string,
+    data?: any
+): Promise<RequestResult> {
+    const config: AxiosRequestConfig = {
+        method,
+        url: endpoint,
+        headers: {
+            'X-Access-Token': process.env.API_KEY as string,
+            'Content-Type': 'application/json',
+        },
+        data: (method === 'POST' || method === 'PUT') ? data : undefined,
+        params: (method === 'GET' || method === 'DELETE') ? data : undefined,
+    };
 
     try {
-        const response = await fetch(endpoint, {
-            method: method,
-            headers: headers,
-            body: data && (method === 'POST' || method === 'PUT') ? JSON.stringify(data) : undefined,
-        });
+        const response: AxiosResponse<Data> = await axios(config);
 
-        const result: Data = await response.json();
-
-        if (response.ok) {
+        return {
+            message: response.data.message || 'Request was successful',
+            data: response.data,
+            headers: convertHeaders(response.headers),
+            status: response.status,
+        };
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
             return {
-                message: result.message || 'Request was successful',
-                data: result,
-                headers: response.headers,
-                response: response,
+                message: error.response.data.error || 'Request failed',
+                data: error.response.data,
+                headers: convertHeaders(error.response.headers),
+                status: error.response.status,
+            };
+        } else if (axios.isAxiosError(error) && error.request) {
+            console.error('Error making request: No response received', error.request);
+            return {
+                message: 'No response received from server',
+                data: {},
+                headers: {},
+                status: 0,
             };
         } else {
+            console.error('Error making request:', error);
             return {
-                message: result.error || 'Request failed',
-                data: result,
-                headers: response.headers,
-                response: response,
+                message: 'Internal Server Error',
+                data: {},
+                headers: {},
+                status: 500,
             };
         }
-    } catch (error) {
-        console.error('Error making request:', error);
-        return {
-            message: 'Internal Server Error',
-            data: {},
-            headers: new Headers(),
-            response: {} as Response,
-        };
     }
 }

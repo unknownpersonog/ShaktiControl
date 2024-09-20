@@ -12,11 +12,11 @@ export default async function Index() {
     let user = await makeRequest('GET', process.env.API_ENDPOINT + '/users/info/' + email)
     if (!user) <LoadingComponent />
     try {
-      if (user && user.response.status === 404) {
+      if (user && user.status === 404) {
         const res = await makeRequest('POST', process.env.API_ENDPOINT + '/users/create', { email, method: "Google" })
-        if (!res || !(res.response.status === 400)) console.error(res ? res.message : "Server Error");
+        if (!res || !(res.status === 400)) console.error(res ? res.message : "Server Error");
         
-        if (res && res.response.status === 200) {
+        if (res && res.status === 200) {
           console.log("Success")
         }
       }
