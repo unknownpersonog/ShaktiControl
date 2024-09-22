@@ -55,7 +55,7 @@ export default function Page() {
     return <ProjectManagement userData={userData} session={session.user} />;
   }
   if (path === "/admin" && userData?.data?.admin) {
-    return <AdminDashboard userData={userData} />;
+    return <AdminDashboard userData={userData} session={session.user} />;
   }
 
   return <NotFoundPage />;

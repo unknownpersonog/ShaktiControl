@@ -49,14 +49,13 @@ interface VPSSortConfig {
 type SortConfig = UserSortConfig | VPSSortConfig;
 
 interface AdminDashboardProps {
+  session: any;
   userData: {
-    data: {
-      admin: boolean;
-    };
-  } | null;
+    data: { email: string; unid: string; admin: string; coins?: number };
+  };
 }
 
-const AdminDashboard = ({ userData }: AdminDashboardProps) => {
+const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
   const [vpsList, setVpsList] = useState<VPS[]>([]);
@@ -175,7 +174,9 @@ const AdminDashboard = ({ userData }: AdminDashboardProps) => {
       <Sidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
-        isAdmin={userData?.data.admin ?? false}
+        isAdmin={true}
+        userData={userData}
+        session={session}
       />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header
