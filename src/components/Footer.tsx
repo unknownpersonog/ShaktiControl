@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const Footer: React.FC = () => (
   <div className="mt-8 flex justify-center">

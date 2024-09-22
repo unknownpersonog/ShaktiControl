@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { makeRequest } from '@/functions/api/makeRequest';
+import React, { useState } from "react";
+import { makeRequest } from "@/functions/api/makeRequest";
 
 type VpsData = {
   vps_name: string;
@@ -12,14 +12,14 @@ type VpsData = {
 
 const AddVpsModal = ({ setShowAddVpsModal, fetchVpsList }: any) => {
   const [newVpsData, setNewVpsData] = useState<VpsData>({
-    vps_name: '',
-    vps_os: '',
-    vps_pass: '',
-    vps_user: '',
-    vps_ip: '',
-    vps_plan: '',
+    vps_name: "",
+    vps_os: "",
+    vps_pass: "",
+    vps_user: "",
+    vps_ip: "",
+    vps_plan: "",
   });
-  
+
   const [error, setError] = useState<string | null>(null);
 
   const handleVpsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,23 +29,27 @@ const AddVpsModal = ({ setShowAddVpsModal, fetchVpsList }: any) => {
 
   const handleAddVps = async () => {
     try {
-      const response = await makeRequest('POST', '/api/uvapi/vps/add', newVpsData);
+      const response = await makeRequest(
+        "POST",
+        "/api/uvapi/vps/add",
+        newVpsData,
+      );
       if (response && response.data) {
-        console.log('VPS added successfully:', response.data);
+        console.log("VPS added successfully:", response.data);
         fetchVpsList(); // Refresh the VPS list
       }
       setShowAddVpsModal(false);
       setNewVpsData({
-        vps_name: '',
-        vps_os: '',
-        vps_pass: '',
-        vps_user: '',
-        vps_ip: '',
-        vps_plan: ''
+        vps_name: "",
+        vps_os: "",
+        vps_pass: "",
+        vps_user: "",
+        vps_ip: "",
+        vps_plan: "",
       });
     } catch (err) {
-      console.error('Error adding VPS:', err);
-      setError('Failed to add VPS');
+      console.error("Error adding VPS:", err);
+      setError("Failed to add VPS");
     }
   };
 
@@ -55,11 +59,18 @@ const AddVpsModal = ({ setShowAddVpsModal, fetchVpsList }: any) => {
         <h2 className="text-xl font-bold mb-4 text-purple-300">Add New VPS</h2>
         {error && <p className="text-red-500">{error}</p>}
         <div className="space-y-2">
-          {['vps_name', 'vps_os', 'vps_pass', 'vps_user', 'vps_ip', 'vps_plan'].map((field) => (
+          {[
+            "vps_name",
+            "vps_os",
+            "vps_pass",
+            "vps_user",
+            "vps_ip",
+            "vps_plan",
+          ].map((field) => (
             <input
               key={field}
               name={field}
-              placeholder={field.replace('_', ' ').toUpperCase()}
+              placeholder={field.replace("_", " ").toUpperCase()}
               value={newVpsData[field as keyof VpsData]}
               onChange={handleVpsChange}
               className="w-full px-4 py-2 backdrop-blur-lg bg-opacity-50 bg-gray-600 text-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"

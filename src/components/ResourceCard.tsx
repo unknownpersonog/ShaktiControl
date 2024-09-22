@@ -1,5 +1,5 @@
-import React from 'react';
-import { MemoryStick, Cpu, HardDrive } from 'lucide-react';
+import React from "react";
+import { MemoryStick, Cpu, HardDrive } from "lucide-react";
 
 // Define the type for resources, using the LucideReact icon type
 interface Resource {
@@ -14,7 +14,9 @@ interface ResourceCardProps {
 
 const ResourceCard: React.FC<ResourceCardProps> = ({ allocatedResources }) => (
   <div className="p-4 md:p-6 rounded-lg bg-opacity-50 border backdrop-blur-md border-purple-500">
-    <h3 className="text-lg md:text-xl font-semibold mb-4 text-purple-300">Allocated Resources</h3>
+    <h3 className="text-lg md:text-xl font-semibold mb-4 text-purple-300">
+      Allocated Resources
+    </h3>
     <div className="space-y-4">
       {allocatedResources.map((resource, index) => (
         <div key={index} className="flex items-center justify-between">

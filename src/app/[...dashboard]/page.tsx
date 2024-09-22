@@ -1,15 +1,14 @@
-'use client';
+"use client";
 
-import Dashboard from '@/components/dashboard';
-import LoadingComponent from '@/components/loading';
-import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { redirect, usePathname } from 'next/navigation';
-import { makeRequest } from '@/functions/api/makeRequest';
-import AdminDashboard from '@/components/adminDash';
-import Servers from '@/components/server';
-import ProjectManagement from '@/components/projects';
-import NotFoundPage from '@/components/404';
+import LoadingComponent from "@/components/loading";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { redirect, usePathname } from "next/navigation";
+import { makeRequest } from "@/functions/api/makeRequest";
+import AdminDashboard from "@/components/adminDash";
+import Servers from "@/components/server";
+import ProjectManagement from "@/components/projects";
+import NotFoundPage from "@/components/404";
 
 export default function Page() {
   const [userData, setUserData] = useState<any | null>(null);
@@ -17,7 +16,7 @@ export default function Page() {
   const { status, data: session } = useSession({
     required: true,
     onUnauthenticated() {
-      redirect('/');
+      redirect("/");
     },
   });
 
@@ -39,7 +38,7 @@ export default function Page() {
     fetchUserData();
   }, [session]);
 
-  if (status === 'loading' || loading) {
+  if (status === "loading" || loading) {
     return <LoadingComponent />;
   }
 
@@ -49,17 +48,14 @@ export default function Page() {
 
   const path = usePathname();
 
-  if (path === '/dashboard') {
-    return <Dashboard userData={userData} session={session.user} />;
-  }
-  if (path === '/servers') {
+  if (path === "/servers") {
     return <Servers />;
   }
-  if (path === '/projects') {
+  if (path === "/projects") {
     return <ProjectManagement userData={userData} session={session.user} />;
   }
-  if (path === '/admin' && userData?.data?.admin) {
-    return <AdminDashboard userData={userData}/>;
+  if (path === "/admin" && userData?.data?.admin) {
+    return <AdminDashboard userData={userData} />;
   }
 
   return <NotFoundPage />;
