@@ -146,7 +146,7 @@ export default function Sidebar({
             {sidebarOpen || isMobile ? (
               <>
                 <User size={18} className="mr-2" />
-                <span>{userData.data.email}</span>
+                <span>Profile</span>
               </>
             ) : (
               <User size={18} />
