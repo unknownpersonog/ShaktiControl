@@ -49,7 +49,7 @@ export default function Page() {
   const path = usePathname();
 
   if (path === "/servers") {
-    return <Servers userData={userData} session={session}/>;
+    return <Servers />;
   }
   if (path === "/projects") {
     return <ProjectManagement userData={userData} session={session.user} />;

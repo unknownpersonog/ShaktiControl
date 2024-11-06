@@ -9,7 +9,7 @@ async function checkAdmin(session: Session): Promise<boolean> {
     `/users/info/${session.user?.email}`,
     "GET",
     undefined,
-    session
+    session,
   );
   return userInfo.data.admin === "true";
 }
@@ -18,7 +18,7 @@ async function proxyRequest(
   url: string,
   method: string,
   body?: any,
-  session?: Session
+  session?: Session,
 ) {
   const response = await fetch(`${API_BASE_URL}${url}`, {
     method,
@@ -47,92 +47,85 @@ async function handleRequest(req: NextRequest, method: "GET" | "POST" | "PUT") {
   let apiUrl = "";
   let requestBody: any = method !== "GET" ? await req.json() : undefined;
 
-  // Ensure email in request body matches session's user email for POST and PUT requests
-  if (method === "POST" || method === "PUT") {
-    requestBody = {
-      ...requestBody,
-      email: discordId, // Ensure the email field is included and set to session.user.email
-    };
-    if (requestBody.email && requestBody.email !== session.user.email) {
-      return new Response(JSON.stringify({ error: "Email mismatch" }), {
-        status: 400,
-      });
-    }
-  }
-
-  // Routes that do not require admin check
-  const userRoutes = {
+  // Routes split by requirements
+  const routesNoAuthCheck = {
     "/api/uvapi/ping": "/ping",
     "/api/uvapi/users/info": `/users/info/${discordId}`,
-    "/api/uvapi/users/create": "/users/create",
-    "/api/uvapi/users/delete": "/users/delete",
-    "/api/uvapi/vps/assign": "/vps/assign",
-    "/api/uvapi/vps/info": "/vps/info", // Adding new VPS info route
   } as const;
 
-  // Routes that require admin access
-  const adminRoutes = {
+  const routesRequireAdmin = {
     "/api/uvapi/users/list": "/users/list",
     "/api/uvapi/vps/list": "/vps/list",
     "/api/uvapi/vps/add": "/vps/add",
     "/api/uvapi/vps/delete": "/vps/delete",
     "/api/uvapi/users/verify/mail": "/users/verify/mail",
     "/api/uvapi/users/verify/token": "/users/verify/token",
+    "/api/uvapi/projects/create": "/projects/create",
+    "/api/uvapi/projects/delete": "/projects/delete",
+    "/api/uvapi/projects/list": "/projects/list",
   } as const;
 
-  const adminPutRoutes = {
+  const routesWithEmailCheck = {
+    "/api/uvapi/users/create": "/users/create",
+    "/api/uvapi/users/delete": "/users/delete",
+  } as const;
+
+  const routesPut = {
     "/api/uvapi/vps/edit": `/vps/edit/${url.pathname.split("/").pop()}`,
     "/api/uvapi/users/edit": `/users/edit/${url.pathname.split("/").pop()}`,
   } as const;
 
-  // Identify if the route is a user route or admin route
-  const matchedRoute =
-    Object.keys(userRoutes).find((route) => url.pathname.startsWith(route)) ||
-    Object.keys(adminRoutes).find((route) => url.pathname.startsWith(route)) ||
-    Object.keys(adminPutRoutes).find((route) =>
-      url.pathname.startsWith(route)
-    );
+  // Find appropriate route
+  const routeConfig = Object.keys({
+    ...routesNoAuthCheck,
+    ...routesRequireAdmin,
+    ...routesWithEmailCheck,
+    ...routesPut,
+  }).find((route) => url.pathname.startsWith(route));
 
-  if (!matchedRoute) {
+  if (!routeConfig) {
     return new Response(JSON.stringify({ message: "Not Found" }), {
       status: 404,
     });
   }
 
-  // Check if route is an admin route and ensure user is an admin
-  if (adminRoutes[matchedRoute as keyof typeof adminRoutes] || adminPutRoutes[matchedRoute as keyof typeof adminPutRoutes]) {
-    const isAdmin = await checkAdmin(session);
-    if (!isAdmin) {
+  // Determine if route requires admin check
+  if (
+    routesRequireAdmin[routeConfig as keyof typeof routesRequireAdmin] ||
+    routesPut[routeConfig as keyof typeof routesPut]
+  ) {
+    if (!(await checkAdmin(session))) {
       return new Response(JSON.stringify({ message: "Forbidden" }), {
         status: 403,
       });
     }
   }
 
-  // Handle VPS Info Route: Check if user owns the VPS before returning the info
-  if (url.pathname.startsWith("/api/uvapi/vps/info/")) {
-    const vpsId = url.pathname.split("/").pop(); // Get the vpsId from the URL
-    const userInfo = await proxyRequest(`/users/info/${session.user.email}`, "GET", undefined, session);
-    
-    // Check if the user owns the VPS
-    if (!userInfo.data.vpsIds.includes(vpsId)) {
-      return new Response(JSON.stringify({ message: "Forbidden: You do not own this VPS" }), {
-        status: 403,
+  // Handle routes that require email checks
+  if (routesWithEmailCheck[routeConfig as keyof typeof routesWithEmailCheck]) {
+    if (!requestBody.email) {
+      return new Response(JSON.stringify({ message: "Email is required" }), {
+        status: 400,
       });
     }
-    
-    // Fetch VPS Info from /vps/info/:vpsId
-    const vpsInfo = await proxyRequest(`/vps/info/${vpsId}`, "GET", undefined, session);
-    return new Response(JSON.stringify(vpsInfo.data), { status: vpsInfo.status });
+    if (routeConfig === "/api/uvapi/users/create") {
+      requestBody.email = discordId; // Set the email to discordId for the 'create' endpoint
+    }
   }
 
   apiUrl =
-    userRoutes[matchedRoute as keyof typeof userRoutes] ||
-    adminRoutes[matchedRoute as keyof typeof adminRoutes] ||
-    adminPutRoutes[matchedRoute as keyof typeof adminPutRoutes];
+    routesNoAuthCheck[routeConfig as keyof typeof routesNoAuthCheck] ||
+    routesRequireAdmin[routeConfig as keyof typeof routesRequireAdmin] ||
+    routesWithEmailCheck[routeConfig as keyof typeof routesWithEmailCheck] ||
+    routesPut[routeConfig as keyof typeof routesPut];
 
   try {
-    const { status, data } = await proxyRequest(apiUrl, method, requestBody, session);
+    const { status, data } = await proxyRequest(
+      apiUrl,
+      method,
+      requestBody,
+      session,
+    );
     return new Response(JSON.stringify(data), { status });
   } catch (error) {
     console.error("Error:", error);
@@ -142,7 +135,6 @@ async function handleRequest(req: NextRequest, method: "GET" | "POST" | "PUT") {
   }
 }
 
-// Expose API methods
 export async function GET(req: NextRequest) {
   return handleRequest(req, "GET");
 }
