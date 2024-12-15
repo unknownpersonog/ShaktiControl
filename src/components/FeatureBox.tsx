@@ -5,10 +5,8 @@ const FeatureBox: React.FC = () => (
     <h3 className="text-lg md:text-xl font-semibold mb-4 text-green-300">
       
     </h3>
-    <script async data-cfasync="false" src="//pl25285160.profitablecpmrate.com/66d98e80a36f51e144d7349e6a1e3868/invoke.js"></script>
-    <div id="container-66d98e80a36f51e144d7349e6a1e3868"></div>
-
-
+    <script async data-cfasync="false" src="//comfortfluffyflabbergasted.com/66d98e80a36f51e144d7349e6a1e3868/invoke.js"></script>
+		<div id="container-66d98e80a36f51e144d7349e6a1e3868"></div>
   </div>
 );
 
