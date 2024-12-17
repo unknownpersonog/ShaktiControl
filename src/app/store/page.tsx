@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 import FeatureBox from "@/components/FeatureBox";
 import { redirect } from "next/navigation";
 
-export default function SettingsPage() {
+export default function StorePage() {
   const { data: session, status } = useSession(); // Session for authentication
   const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -47,10 +47,10 @@ export default function SettingsPage() {
       />
 
       <main className={`flex-1 p-4 md:p-6 ${isMobile ? "pt-20" : ""}`}>
-        <Header page="Settings" />
+        <Header page="Store" />
         <Alert
-          title="Settings"
-          description="You can change things according to your preferences."
+          title="Store"
+          description="Spend your service coins for special bonuses."
           variant="default"
         />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-0">

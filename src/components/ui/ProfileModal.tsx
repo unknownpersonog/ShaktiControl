@@ -1,21 +1,24 @@
 "use client";
 import { X, Mail, Coins, UserCheck, Terminal } from "lucide-react";
 import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useApiInfo } from "@/app/context/ApiInfoProvider";
 import React from "react";
 
 interface ProfileModalProps {
-  session: any;
-  userData: {
-    data: { email: string; unid: string; admin: string; coins?: number };
-  };
+
+
+
   onClose: () => void;
 }
 
 const ProfileModal: React.FC<ProfileModalProps> = ({
-  userData,
-  session,
+
+
   onClose,
 }) => {
+  const { data: session, status } = useSession(); // Session for authentication
+   const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
       <div className="bg-gray-900 text-green-400 rounded-lg p-6 w-full max-w-lg relative shadow-lg font-mono">
@@ -35,7 +38,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
         {/* User Info Lines */}
         <div className="bg-gray-800 p-2 rounded-lg mb-2">
-          <span>{`Name: ${session.name}`}</span>
+          <span>{`Name: ${session?.user?.name}`}</span>
         </div>
         <div className="bg-gray-800 p-2 rounded-lg mb-2">
           <span>{`Email: ${userData.data.email}`}</span>
