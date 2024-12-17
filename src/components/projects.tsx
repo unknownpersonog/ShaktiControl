@@ -150,9 +150,9 @@ export default function ProjectManagement({ userData, session }: ProjectProps) {
       <Sidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
-        isAdmin={userData.data.admin === "true"}
-        userData={userData}
-        session={session}
+
+
+
       />
 
       <main className={`flex-1 p-6 md:p-10 ${isMobile ? "pt-20" : ""}`}>

@@ -18,14 +18,17 @@ import {
   Shield,
   Menu,
   User,
+  Coins,
+  Store,
 } from "lucide-react";
 import ProfileModal from "@/components/ui/ProfileModal"; // Import ProfileModal
+import { useApiInfo } from "@/app/context/ApiInfoProvider";
 
 const sidebarItems = [
   { name: "Dashboard", icon: Home },
   { name: "Servers", icon: Server },
-  { name: "Analytics", icon: BarChart2 },
-  { name: "Messages", icon: Mail },
+  { name: "Earn", icon: Coins },
+  { name: "Store", icon: Store },
   { name: "Calendar", icon: Calendar },
   { name: "Users", icon: Users },
   { name: "Projects", icon: Briefcase },
@@ -36,23 +39,24 @@ const sidebarItems = [
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
-  isAdmin: boolean;
-  session: any;
-  userData: {
-    data: { email: string; unid: string; admin: string; coins?: number };
-  };
+
+
+
+
+
 }
 
 export default function Sidebar({
   sidebarOpen,
   setSidebarOpen,
-  isAdmin,
-  session,
-  userData,
+
+
+
 }: SidebarProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false); // State to control modal visibility
-
+	const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
+  const isAdmin = userData?.data?.admin === "true";
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -157,8 +161,8 @@ export default function Sidebar({
 
       {showProfileModal && (
         <ProfileModal
-          session={session}
-          userData={userData}
+
+
           onClose={() => setShowProfileModal(false)}
         />
       )}

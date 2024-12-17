@@ -131,9 +131,9 @@ export default function DashboardPage() {
       <Sidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
-        isAdmin={userData?.data?.admin === "true"}
-        session={session.user}
-        userData={userData}
+
+
+
       />
 
       <main className={`flex-1 p-4 md:p-6 ${isMobile ? "pt-20" : ""}`}>
