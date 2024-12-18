@@ -22,7 +22,7 @@ import {
   Store,
 } from "lucide-react";
 import ProfileModal from "@/components/ui/ProfileModal"; // Import ProfileModal
-import { useApiInfo } from "@/app/context/ApiInfoProvider";
+import { useApiInfo } from "@/context/ApiInfoProvider";
 
 const sidebarItems = [
   { name: "Dashboard", icon: Home },
@@ -39,23 +39,12 @@ const sidebarItems = [
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
-
-
-
-
-
 }
 
-export default function Sidebar({
-  sidebarOpen,
-  setSidebarOpen,
-
-
-
-}: SidebarProps) {
+export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false); // State to control modal visibility
-	const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
+  const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
   const isAdmin = userData?.data?.admin === "true";
   useEffect(() => {
     const checkMobile = () => {
@@ -160,11 +149,7 @@ export default function Sidebar({
       </aside>
 
       {showProfileModal && (
-        <ProfileModal
-
-
-          onClose={() => setShowProfileModal(false)}
-        />
+        <ProfileModal onClose={() => setShowProfileModal(false)} />
       )}
     </>
   );

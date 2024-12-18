@@ -7,7 +7,7 @@ import { Inter } from "next/font/google";
 import LoadingComponent from "@/components/loading";
 import { SessionProvider } from "next-auth/react";
 import Image from "next/image";
-import { ApiInfoProvider } from './context/ApiInfoProvider'
+import { ApiInfoProvider } from "@/context/ApiInfoProvider";
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <SessionProvider>
         <ApiInfoProvider>
-        	<body className={inter.className}>{children}</body>
+          <body className={inter.className}>{children}</body>
         </ApiInfoProvider>
       </SessionProvider>
     </html>

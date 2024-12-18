@@ -13,17 +13,17 @@ interface ApiInfoContextType {
 
 const ApiInfoContext = createContext<ApiInfoContextType | null>(null);
 
-export const ApiInfoProvider = ({ children }: { children: React.ReactNode }) => {
+export const ApiInfoProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [userData, setUserData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { status, data: session } = useSession();
 
   useEffect(() => {
-
-
-
-
     const fetchUserData = async () => {
       if (session?.user) {
         try {

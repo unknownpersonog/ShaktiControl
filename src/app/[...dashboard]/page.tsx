@@ -48,7 +48,6 @@ export default function Page() {
 
   const path = usePathname();
 
-
   if (path === "/projects") {
     return <ProjectManagement userData={userData} session={session.user} />;
   }

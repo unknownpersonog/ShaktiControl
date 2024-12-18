@@ -147,13 +147,7 @@ export default function ProjectManagement({ userData, session }: ProjectProps) {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-
-
-
-      />
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <main className={`flex-1 p-6 md:p-10 ${isMobile ? "pt-20" : ""}`}>
         <header className="flex justify-between items-center mb-8">

@@ -2,23 +2,16 @@
 import { X, Mail, Coins, UserCheck, Terminal } from "lucide-react";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useApiInfo } from "@/app/context/ApiInfoProvider";
+import { useApiInfo } from "@/context/ApiInfoProvider";
 import React from "react";
 
 interface ProfileModalProps {
-
-
-
   onClose: () => void;
 }
 
-const ProfileModal: React.FC<ProfileModalProps> = ({
-
-
-  onClose,
-}) => {
+const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
   const { data: session, status } = useSession(); // Session for authentication
-   const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
+  const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
       <div className="bg-gray-900 text-green-400 rounded-lg p-6 w-full max-w-lg relative shadow-lg font-mono">

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { redirect, usePathname } from "next/navigation";
+import { useApiInfo } from "@/context/ApiInfoProvider";
 import { makeRequest } from "@/functions/api/makeRequest";
 import { User, Bell, HardDrive, Cpu, MemoryStick } from "lucide-react";
 import LoadingComponent from "@/components/loading";
@@ -57,7 +58,6 @@ const availableOS = [
 ];
 
 export default function DashboardPage() {
-  const [userData, setUserData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const { status, data: session } = useSession({
     required: true,
@@ -65,29 +65,12 @@ export default function DashboardPage() {
       redirect("/");
     },
   });
+  const { userData, loading: userDataLoading, error } = useApiInfo(); // Use context
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [serverStatus, setServerStatus] = useState({ API: "Offline" });
   const [isMobile, setIsMobile] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (session?.user) {
-        try {
-          const data = await makeRequest("GET", "/api/uvapi/users/info");
-          setUserData(data);
-        } catch (error) {
-          console.error("Failed to fetch user data:", error);
-          setUserData(null);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchUserData();
-  }, [session]);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -128,13 +111,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex min-h-screen text-white relative">
-      <Sidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-
-
-
-      />
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <main className={`flex-1 p-4 md:p-6 ${isMobile ? "pt-20" : ""}`}>
         <Header page="Dashboard" />

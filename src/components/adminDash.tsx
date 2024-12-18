@@ -171,13 +171,7 @@ const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
 
   return (
     <div className="flex h-screen text-white">
-      <Sidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-
-
-
-      />
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header
           setSidebarOpen={setSidebarOpen}

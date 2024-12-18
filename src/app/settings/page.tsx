@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useApiInfo } from "../context/ApiInfoProvider";
+import { useApiInfo } from "@/context/ApiInfoProvider";
 import LoadingComponent from "@/components/loading";
 import Sidebar from "@/components/sidebar";
 import Alert from "@/components/ui/alert";
@@ -38,13 +38,7 @@ export default function SettingsPage() {
 
   return (
     <div className="flex min-h-screen text-white relative">
-      <Sidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-
-
-
-      />
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <main className={`flex-1 p-4 md:p-6 ${isMobile ? "pt-20" : ""}`}>
         <Header page="Settings" />
