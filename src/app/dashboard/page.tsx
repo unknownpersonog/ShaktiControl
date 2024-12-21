@@ -58,7 +58,6 @@ const availableOS = [
 ];
 
 export default function DashboardPage() {
-  const [loading, setLoading] = useState(true);
   const { status, data: session } = useSession({
     required: true,
     onUnauthenticated() {
@@ -70,7 +69,6 @@ export default function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [serverStatus, setServerStatus] = useState({ API: "Offline" });
   const [isMobile, setIsMobile] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -95,7 +93,7 @@ export default function DashboardPage() {
     fetchServerStatus();
   }, []);
 
-  if (status === "loading" || loading) {
+  if (userDataLoading) {
     return <LoadingComponent />;
   }
 
