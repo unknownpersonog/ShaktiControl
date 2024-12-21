@@ -93,13 +93,10 @@ export default function DashboardPage() {
     fetchServerStatus();
   }, []);
 
-  if (userDataLoading) {
+  if (!userDataLoading) {
     return <LoadingComponent />;
   }
 
-  if (session == null || session.user == null) {
-    return <p>Internal Server Error</p>;
-  }
 
   const path = usePathname();
 
