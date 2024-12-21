@@ -9,11 +9,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FeatureBox from "@/components/FeatureBox";
 import { redirect } from "next/navigation";
-import { redirect } from "next/navigation";
 
 export default function SettingsPage() {
-  const { data: session, status } = useSession(); // Session for authentication
-  const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
   const { data: session, status } = useSession(); // Session for authentication
   const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -32,17 +29,9 @@ export default function SettingsPage() {
   }
 
   if (status === "loading" || userDataLoading) {
-  // Handle unauthenticated users
-  if (status === "unauthenticated") {
-    redirect("/");
-  }
-
-  if (status === "loading" || userDataLoading) {
     return <LoadingComponent />;
   }
 
-  if (error) {
-    return <p>Error: {error}</p>;
   if (error) {
     return <p>Error: {error}</p>;
   }
