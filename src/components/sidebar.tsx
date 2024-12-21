@@ -29,6 +29,8 @@ const sidebarItems = [
   { name: "Servers", icon: Server },
   { name: "Earn", icon: Coins },
   { name: "Store", icon: Store },
+  { name: "Earn", icon: Coins },
+  { name: "Store", icon: Store },
   { name: "Calendar", icon: Calendar },
   { name: "Users", icon: Users },
   { name: "Projects", icon: Briefcase },
