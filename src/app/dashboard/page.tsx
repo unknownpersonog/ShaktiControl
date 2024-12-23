@@ -93,7 +93,7 @@ export default function DashboardPage() {
     fetchServerStatus();
   }, []);
 
-  if (!userDataLoading) {
+  if (userDataLoading) {
     return <LoadingComponent />;
   }
 
