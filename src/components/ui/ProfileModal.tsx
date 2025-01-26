@@ -13,8 +13,8 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
   const { data: session, status } = useSession(); // Session for authentication
   const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-      <div className="bg-gray-900 text-green-400 rounded-lg p-6 w-full max-w-lg relative shadow-lg font-mono">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+      <div className="bg-opacity-90 border border-gray-300 bg-black text-green-400 rounded-lg p-6 w-full max-w-lg relative shadow-lg font-mono">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -25,7 +25,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
 
         {/* Terminal Icon Header */}
         <div className="flex items-center mb-4">
-          <Terminal size={24} className="text-green-400 mr-2 border" />
+          <Terminal size={24} className="text-green-400 mr-2 border rounded" />
           <h2 className="text-2xl font-bold">Profile</h2>
         </div>
 

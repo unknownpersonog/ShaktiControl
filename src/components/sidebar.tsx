@@ -64,12 +64,12 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   return (
     <>
       {/* Mobile menu button */}
-      {isMobile && (
+      {isMobile && !sidebarOpen && (
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="fixed top-4 left-4 z-50 p-2 bg-purple-600 rounded-full text-white"
+          className="fixed top-4 left-4 z-50 p-2 bg-gray-800 rounded-full text-white"
         >
-          {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          <ChevronRight size={24} />
         </button>
       )}
 
@@ -79,25 +79,25 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           ${isMobile ? (sidebarOpen ? "translate-x-0" : "-translate-x-full") : ""}
           ${isMobile ? "fixed inset-y-0 left-0 z-40" : "relative"}
           transition-all duration-300 ease-in-out
-          bg-opacity-80 backdrop-blur-lg border-r border-purple-500
+          bg-opacity-80 backdrop-blur-lg border-r border-gray-400
           flex flex-col
-          ${isMobile ? "w-64" : sidebarOpen ? "w-64" : "w-24"}
+          ${isMobile ? "w-64" : sidebarOpen ? "w-64" : ""}
           overflow-y-auto
         `}
       >
         <div className="p-6 flex-grow">
           <div className="flex justify-between items-center mb-8">
             {(sidebarOpen || isMobile) && (
-              <h2 className="text-2xl font-bold text-purple-300">UnknownVPS</h2>
+              <h2 className="text-2xl font-bold text-gray-100">UnknownVPS</h2>
             )}
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="text-white p-1 rounded-full hover:bg-purple-700 transition-colors"
+              className="text-white p-1 rounded-full hover:bg-gray-200 hover:text-gray-900 transition-colors"
             >
               {sidebarOpen ? (
-                <ChevronLeft size={24} />
+                <ChevronLeft size={25} />
               ) : (
-                <ChevronRight size={24} />
+                <ChevronRight size={25} />
               )}
             </button>
           </div>
@@ -108,9 +108,9 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   <Link
                     href={`/${item.name.toLowerCase()}`}
                     className={`
-                      flex items-center py-2 px-4 rounded text-gray-300
-                      hover:bg-purple-700 hover:text-white transition-colors
-                      ${!sidebarOpen && !isMobile && "justify-center"}
+                      flex items-center py-2 px-2 rounded text-gray-300
+                      hover:bg-gray-200 hover:text-gray-900 transition-colors
+                      ${!sidebarOpen && !isMobile && ""}
                     `}
                     title={item.name}
                   >
@@ -131,8 +131,8 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
             onClick={() => setShowProfileModal(true)} // Open modal on click
             className={`
               flex items-center justify-center py-2 px-4 rounded
-              text-purple-300 border border-purple-500
-              hover:bg-purple-700 hover:text-white transition-colors
+              text-gray-300 border border-gray-300
+              hover:bg-gray-200 hover:text-gray-900 transition-colors
               cursor-pointer
             `}
           >

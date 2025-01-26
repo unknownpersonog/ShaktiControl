@@ -14,7 +14,7 @@ const Header = ({
     >
       {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
     </button>
-    <h1 className="text-2xl font-bold text-purple-300">Admin Dashboard</h1>
+    <h1 className="text-2xl font-bold text-gray-100">Admin Dashboard</h1>
     <div className="flex items-center space-x-4">
       <button
         className="p-2 rounded-full bg-gray-700 hover:bg-gray-600"

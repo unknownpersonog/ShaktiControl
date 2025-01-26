@@ -3,7 +3,7 @@ const TabButtons = ({ activeTab, setActiveTab }: any) => (
     {["user", "vps", "os"].map((tab) => (
       <button
         key={tab}
-        className={`px-4 py-2 rounded-lg ${activeTab === tab ? "bg-purple-500" : "bg-gray-700"} text-white`}
+        className={`px-4 py-2 rounded-lg ${activeTab === tab ? "bg-gray-300 text-gray-900" : "bg-gray-800"} text-white`}
         onClick={() => setActiveTab(tab)}
       >
         {tab.charAt(0).toUpperCase() + tab.slice(1)} Management

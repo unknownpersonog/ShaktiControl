@@ -172,7 +172,7 @@ const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
   return (
     <div className="flex h-screen text-white">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="p-4 flex-1 flex flex-col overflow-hidden">
         <Header
           setSidebarOpen={setSidebarOpen}
           sidebarOpen={sidebarOpen}
@@ -183,7 +183,7 @@ const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
           <TabButtons activeTab={activeTab} setActiveTab={setActiveTab} />
           {loading ? (
             <div className="flex items-center justify-center h-full">
-              <RefreshCw className="animate-spin h-8 w-8 text-purple-500" />
+              <RefreshCw className="animate-spin h-8 w-8 text-gray-200" />
             </div>
           ) : activeTab === "user" ? (
             <UserTable
@@ -203,8 +203,8 @@ const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
               setShowDeleteConfirmation={setShowDeleteConfirmation}
             />
           ) : (
-            <div className="p-6 rounded-lg border border-purple-500 bg-opacity-50 backdrop-blur-lg">
-              <h2 className="text-xl font-bold mb-4 text-purple-300">
+            <div className="p-6 rounded-lg border border-gray-300 bg-opacity-50 backdrop-blur-lg">
+              <h2 className="text-xl font-bold mb-4 text-gray-200">
                 OS Management
               </h2>
               <p className="text-gray-300">Coming soon...</p>
