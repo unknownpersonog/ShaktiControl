@@ -15,7 +15,7 @@ const Alert: React.FC<AlertProps> = ({
   const baseStyles = "relative w-full rounded-lg border p-4 mb-4";
   const variantStyles = {
     default:
-      "border-purple-200 text-gray-200 bg-blue-800 bg-opacity-30 backdrop-blur-md",
+      "border-white-200 text-gray-200 bg-blue-800 bg-opacity-30 backdrop-blur-md",
     destructive: "bg-red-100 border-red-200 text-red-900",
   };
 

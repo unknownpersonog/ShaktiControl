@@ -10,8 +10,8 @@ interface ActivityListProps {
 }
 
 const ActivityList: React.FC<ActivityListProps> = ({ activities }) => (
-  <div className="p-4 md:p-6 rounded-lg bg-opacity-50 border backdrop-blur-md border-blue-500 col-span-1 lg:col-span-2">
-    <h3 className="text-lg md:text-xl font-semibold mb-4 text-teal-300">
+  <div className="p-4 md:p-6 rounded-lg bg-opacity-50 border backdrop-blur-md border-white-200 col-span-1 lg:col-span-2">
+    <h3 className="text-lg md:text-xl font-semibold mb-4 text-gray-200">
       Recent Activity
     </h3>
     <ul className="space-y-2">
