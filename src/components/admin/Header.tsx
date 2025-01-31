@@ -8,12 +8,6 @@ const Header = ({
   setShowAddVpsModal,
 }: any) => (
   <header className="flex justify-between items-center p-4">
-    <button
-      onClick={() => setSidebarOpen(!sidebarOpen)}
-      className="p-2 rounded-md lg:hidden"
-    >
-      {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
-    </button>
     <h1 className="text-2xl font-bold text-gray-100">Admin Dashboard</h1>
     <div className="flex items-center space-x-4">
       <button

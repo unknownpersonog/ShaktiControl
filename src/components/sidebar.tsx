@@ -79,7 +79,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           ${isMobile ? (sidebarOpen ? "translate-x-0" : "-translate-x-full") : ""}
           ${isMobile ? "fixed inset-y-0 left-0 z-40" : "relative"}
           transition-all duration-300 ease-in-out
-          bg-opacity-80 backdrop-blur-lg border-r border-gray-400
+          bg-opacity-80 backdrop-blur-lg border-r border-gray-500
           flex flex-col
           ${isMobile ? "w-64" : sidebarOpen ? "w-64" : ""}
           overflow-y-auto

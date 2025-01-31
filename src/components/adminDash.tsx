@@ -11,7 +11,7 @@ import EditUserModal from "@/components/admin/EditUserModal";
 import EditVpsModal from "@/components/admin/EditVpsModal";
 import DeleteConfirmationModal from "@/components/admin/DeleteConfirmationModal";
 import { makeRequest } from "@/functions/api/makeRequest";
-import { RefreshCw } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 
 interface User {
   _id: string;
@@ -56,7 +56,7 @@ interface AdminDashboardProps {
 }
 
 const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [vpsList, setVpsList] = useState<VPS[]>([]);
   const [loading, setLoading] = useState(false);
@@ -183,7 +183,7 @@ const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
           <TabButtons activeTab={activeTab} setActiveTab={setActiveTab} />
           {loading ? (
             <div className="flex items-center justify-center h-full">
-              <RefreshCw className="animate-spin h-8 w-8 text-gray-200" />
+              <LoaderCircle className="animate-spin h-8 w-8 text-gray-200" />
             </div>
           ) : activeTab === "user" ? (
             <UserTable

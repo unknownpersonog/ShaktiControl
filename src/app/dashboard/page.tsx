@@ -110,13 +110,6 @@ export default function DashboardPage() {
 
       <main className={`flex-1 p-4 md:p-6 ${isMobile ? "pt-20" : ""}`}>
         <Header page="Dashboard" />
-
-        <Alert
-          title="Welcome to your dashboard"
-          description="Check out the latest updates and your resource allocation below."
-          variant="default"
-        />
-
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-0">
           <ServerStatusCard serverStatus={serverStatus} />
           <ResourceCard allocatedResources={allocatedResources} />

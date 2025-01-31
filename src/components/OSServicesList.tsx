@@ -11,7 +11,7 @@ interface OSServicesListProps {
 }
 
 const OSServicesList: React.FC<OSServicesListProps> = ({ osList }) => (
-  <div className="p-4 md:p-6 rounded-lg bg-opacity-50 border backdrop-blur-md border-gray-300">
+  <div className="p-4 md:p-6 rounded-lg bg-opacity-50 border backdrop-blur-md border-gray-500">
     <h3 className="text-lg md:text-xl font-semibold mb-4 text-gray-200">
       Available OS & Services
     </h3>
