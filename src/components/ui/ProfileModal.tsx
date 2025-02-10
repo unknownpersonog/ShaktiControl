@@ -32,7 +32,6 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
         {/* User Info Lines */}
         <div className="bg-gray-800 p-2 rounded-lg mb-2">
           <span>{`Name: ${session?.user?.name}`}</span>
-          <span>{`Name: ${session?.user?.name}`}</span>
         </div>
         <div className="bg-gray-800 p-2 rounded-lg mb-2">
           <span>{`Email: ${userData.data.email}`}</span>
