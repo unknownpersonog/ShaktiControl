@@ -55,8 +55,8 @@ const AddVpsModal = ({ setShowAddVpsModal, fetchVpsList }: any) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm">
-      <div className="bg-gray-800 p-6 w-full max-w-md rounded-lg border border-purple-500">
-        <h2 className="text-xl font-bold mb-4 text-purple-300">Add New VPS</h2>
+      <div className="bg-gray-800 p-6 w-full max-w-md rounded-lg border border-gray-300">
+        <h2 className="text-xl font-bold mb-4 text-gray-200">Add New VPS</h2>
         {error && <p className="text-red-500">{error}</p>}
         <div className="space-y-2">
           {[

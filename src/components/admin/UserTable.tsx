@@ -73,7 +73,7 @@ const UserTable: React.FC<UserTableProps> = ({
   };
 
   return (
-    <div className="p-6 rounded-lg border border-purple-500 bg-opacity-50 backdrop-blur-lg">
+    <div className="p-6 rounded-lg border border-gray-300 bg-opacity-50 backdrop-blur-lg">
       <div className="overflow-x-auto">
         <table className="min-w-full">
           <thead>
@@ -135,7 +135,6 @@ const UserTable: React.FC<UserTableProps> = ({
                         alt="Google"
                         className="w-5 h-5 mr-2"
                       />
-                      Google
                     </div>
                   ) : (
                     user.method

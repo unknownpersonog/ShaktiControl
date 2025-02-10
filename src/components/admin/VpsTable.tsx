@@ -26,8 +26,8 @@ const VpsTable = ({
   setShowEditVpsModal,
   setShowDeleteConfirmation,
 }: VpsTableProps) => (
-  <div className="p-6 rounded-lg border border-purple-500 bg-opacity-50 backdrop-blur-lg">
-    <h2 className="text-xl font-bold mb-4 text-purple-300">VPS Management</h2>
+  <div className="p-6 rounded-lg border border-gray-300 bg-opacity-50 backdrop-blur-lg">
+    <h2 className="text-xl font-bold mb-4 text-gray-200">VPS Management</h2>
     <div className="overflow-x-auto">
       <table className="min-w-full">
         <thead>
