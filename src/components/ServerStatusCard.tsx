@@ -12,7 +12,7 @@ interface ServerStatusCardProps {
 const ServerStatusCard: React.FC<ServerStatusCardProps> = ({
   serverStatus,
 }) => (
-  <div className="p-4 md:p-6 rounded-lg bg-opacity-50 border backdrop-blur-md border-gray-500">
+  <div className="p-4 md:p-6 rounded-lg bg-opacity-50 border backdrop-blur-md border-gray-500 shadow shadow-gray-500">
     <h3 className="text-lg md:text-xl font-semibold mb-4 dark:text-gray-200">
       Server Status
     </h3>

@@ -73,7 +73,7 @@ const UserTable: React.FC<UserTableProps> = ({
   };
 
   return (
-    <div className="p-6 rounded-lg border border-gray-300 bg-opacity-50 backdrop-blur-lg">
+    <div className="p-6 rounded-lg border border-gray-300 bg-opacity-50 backdrop-blur-lg shadow shadow-gray-300">
       <div className="overflow-x-auto">
         <table className="min-w-full">
           <thead>
@@ -128,11 +128,11 @@ const UserTable: React.FC<UserTableProps> = ({
                 </td>
                 <td className="px-4 py-2">{user.email}</td>
                 <td className="px-4 py-2">
-                  {user.method === "Google" ? (
+                  {(user.method === "Google" || "Discord") ? (
                     <div className="flex items-center">
                       <img
-                        src="/google.png"
-                        alt="Google"
+                        src={user.method.charAt(0).toLowerCase() + user.method.slice(1) + ".png"}
+                        alt={user.method}
                         className="w-5 h-5 mr-2"
                       />
                     </div>

@@ -9,6 +9,7 @@ export default async function Index() {
   const session = await auth();
   if (session) {
     const email = session.user?.email;
+    const method = (session?.user?.image || "").includes("discord") ? "Discord" : "Google";
     let user = await makeRequest(
       "GET",
       process.env.API_ENDPOINT + "/users/info/" + email,
@@ -19,7 +20,7 @@ export default async function Index() {
         const res = await makeRequest(
           "POST",
           process.env.API_ENDPOINT + "/users/create",
-          { email, method: "Google" },
+          { email, method: method },
         );
         if (!res || !(res.status === 400))
           console.error(res ? res.message : "Server Error");
