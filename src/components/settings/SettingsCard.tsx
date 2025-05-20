@@ -15,7 +15,7 @@ const SettingsCard: React.FC<SettingsCardProps> = ({ title, description, childre
 
   return (
     <div className="p-6 rounded-lg bg-opacity-50 border backdrop-blur-md border-gray-500 shadow shadow-gray-500 hover:shadow-white/20 transition-all duration-300">
-      <h3 className="text-xl font-semibold mb-2 text-pink-300">{title}</h3>
+      <h3 className="text-xl font-semibold mb-2 text-white-300">{title}</h3>
       <p className="text-gray-300 mb-4 text-sm">{description}</p>
       <div className="space-y-4">
         {children}

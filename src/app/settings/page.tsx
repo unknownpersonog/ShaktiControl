@@ -9,8 +9,8 @@ import Alert from "@/components/ui/alert";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProfileSettings from "@/components/settings/ProfileSettings";
-import SecuritySettings from "@/components/settings/SecuritySettings";
 import { redirect } from "next/navigation";
+import ServicesOverview from "@/components/settings/ServicesOverview";
 
 export default function SettingsPage() {
   const { data: session, status } = useSession();
@@ -50,7 +50,7 @@ export default function SettingsPage() {
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           <ProfileSettings />
-          <SecuritySettings />
+          <ServicesOverview />
         </div>
         <Footer />
       </main>

@@ -58,7 +58,8 @@ export default function ChatInterface() {
     d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
 
   return (
-    <div className="min-h-screen flex flex-col h-[calc(100vh-300px)] bg-black/5 backdrop-blur-lg border border-white/10 rounded-xl shadow-xl">
+    <div className="flex flex-col h-screen bg-black/5 backdrop-blur-lg border border-white/10 rounded-xl shadow-xl">
+
       {/* Chat body */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map((m, i) => (
