@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -7,12 +8,13 @@ import Sidebar from "@/components/sidebar";
 import Alert from "@/components/ui/alert";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import FeatureBox from "@/components/FeatureBox";
+import ProfileSettings from "@/components/settings/ProfileSettings";
+import SecuritySettings from "@/components/settings/SecuritySettings";
 import { redirect } from "next/navigation";
 
 export default function SettingsPage() {
-  const { data: session, status } = useSession(); // Session for authentication
-  const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
+  const { data: session, status } = useSession();
+  const { userData, loading: userDataLoading, error } = useApiInfo();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -23,7 +25,6 @@ export default function SettingsPage() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Handle unauthenticated users
   if (status === "unauthenticated") {
     redirect("/");
   }
@@ -44,11 +45,12 @@ export default function SettingsPage() {
         <Header page="Settings" />
         <Alert
           title="Settings"
-          description="You can change things according to your preferences."
+          description="Customize your account preferences and security settings."
           variant="default"
         />
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-0">
-          <FeatureBox />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <ProfileSettings />
+          <SecuritySettings />
         </div>
         <Footer />
       </main>

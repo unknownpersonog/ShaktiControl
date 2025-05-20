@@ -20,6 +20,7 @@ import {
   User,
   Coins,
   Store,
+  Bot
 } from "lucide-react";
 import ProfileModal from "@/components/ui/ProfileModal"; // Import ProfileModal
 import { useApiInfo } from "@/context/ApiInfoProvider";
@@ -32,7 +33,7 @@ const sidebarItems = [
   { name: "Calendar", icon: Calendar },
   { name: "Users", icon: Users },
   { name: "Projects", icon: Briefcase },
-  { name: "Global Network", icon: Globe },
+  { name: "Chat", icon: Bot },
   { name: "Settings", icon: Settings },
 ];
 

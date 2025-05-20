@@ -1,7 +1,9 @@
-import { signIn } from "../../auth";
+"use client";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 
-export default function Login() {
+
+export default async function Login() {
   return (
     <main className="min-h-screen flex items-center justify-center">
       <div className="border border-gray-600 rounded-xl p-6 backdrop-blur-md bg-black/50 shadow-gray-700 shadow-lg max-w-md hover:shadow-white/20 transition-all duration-300">
@@ -24,14 +26,8 @@ export default function Login() {
         </div>
         
         <div className="w-full font-mono flex flex-col items-center gap-3 mb-4">
-          <form
-            action={async () => {
-              "use server";
-              await signIn("google");
-            }}
-            className="w-full max-w-xs"
-          >
             <button
+              onClick={() => signIn("google")}
               className="flex items-center rounded-lg border p-3 text-white bg-white/10 border-gray-500 hover:bg-white/20 transition-all duration-200 w-full justify-center shadow-md shadow-white/5 hover:shadow-white/10"
               type="submit"
             >
@@ -44,13 +40,9 @@ export default function Login() {
               />
               Sign in with Google
             </button>
-          </form>
           
           <form
-            action={async () => {
-              "use server";
-              await signIn("discord");
-            }}
+            action={() => signIn("discord")}
             className="w-full max-w-xs"
           >
             <button
