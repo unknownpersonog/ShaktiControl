@@ -41,11 +41,8 @@ export default async function Login() {
               Sign in with Google
             </button>
           
-          <form
-            action={() => signIn("discord")}
-            className="w-full max-w-xs"
-          >
             <button
+              onClick={() => signIn("discord")}
               className="flex items-center rounded-lg border p-3 text-white bg-white/10 border-gray-500 hover:bg-white/20 transition-all duration-200 w-full justify-center shadow-md shadow-white/5 hover:shadow-white/10"
               type="submit"
             >
@@ -58,7 +55,6 @@ export default async function Login() {
               />
               Sign in with Discord
             </button>
-          </form>
         </div>
         
         <div className="flex justify-center mt-2">
