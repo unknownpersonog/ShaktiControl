@@ -51,6 +51,9 @@ async function handleRequest(req: NextRequest, method: "GET" | "POST" | "PUT") {
   const routesNoAuthCheck = {
     "/api/uvapi/ping": "/ping",
     "/api/uvapi/users/info": `/users/info/${discordId}`,
+    "/api/uvapi/services/enabled": `/services/enabled/${discordId}`,
+    "/api/uvapi/services/toggle": `/services/toggle`,
+    "/api/uvapi/services/all": `/services/all`,
   } as const;
 
   const routesRequireAdmin = {
@@ -63,6 +66,8 @@ async function handleRequest(req: NextRequest, method: "GET" | "POST" | "PUT") {
     "/api/uvapi/projects/create": "/projects/create",
     "/api/uvapi/projects/delete": "/projects/delete",
     "/api/uvapi/projects/list": "/projects/list",
+    "/api/uvapi/services/add": "/services/add",
+    "/api/uvapi/services/adminall": "/services/alladmin",
   } as const;
 
   const routesWithEmailCheck = {

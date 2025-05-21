@@ -12,6 +12,7 @@ import EditVpsModal from "@/components/admin/EditVpsModal";
 import DeleteConfirmationModal from "@/components/admin/DeleteConfirmationModal";
 import { makeRequest } from "@/functions/api/makeRequest";
 import { LoaderCircle } from "lucide-react";
+import ServiceAdminPage from "./admin/ServiceTable";
 
 interface User {
   _id: string;
@@ -60,7 +61,7 @@ const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
   const [users, setUsers] = useState<User[]>([]);
   const [vpsList, setVpsList] = useState<VPS[]>([]);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<"user" | "vps" | "os">("user");
+  const [activeTab, setActiveTab] = useState<"user" | "vps" | "os" | "service">("user");
   const [showAddVpsModal, setShowAddVpsModal] = useState(false);
   const [showEditUserModal, setShowEditUserModal] = useState(false);
   const [showEditVpsModal, setShowEditVpsModal] = useState(false);
@@ -202,6 +203,8 @@ const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
               setShowEditVpsModal={setShowEditVpsModal}
               setShowDeleteConfirmation={setShowDeleteConfirmation}
             />
+          ) : activeTab === "service" ? (
+            <ServiceAdminPage />
           ) : (
             <div className="p-6 rounded-lg border border-gray-300 bg-opacity-50 backdrop-blur-lg">
               <h2 className="text-xl font-bold mb-4 text-gray-200">
