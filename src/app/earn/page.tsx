@@ -49,6 +49,7 @@ export default function EarnPage() {
         />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-0">
           <FeatureBox />
+          <a className="border bg-gray-400 text-gray-100" href="https://link-hub.net/442749/unknownvps-earn">LinkVertise Link: Donate</a>
         </div>
         <Footer />
       </main>

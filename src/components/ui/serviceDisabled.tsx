@@ -42,7 +42,7 @@ export default function ServiceDisabled({
           className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-gray-500/20 hover:bg-gray-300 transition-colors text-white-400 hover:text-gray-800"
         >
           <Settings className="w-5 h-5" />
-          Settings
+          Enable in Settings
         </Link>
       </div>
     </div>
