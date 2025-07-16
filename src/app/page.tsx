@@ -28,6 +28,21 @@ export default async function Index() {
         if (res && res.status === 200) {
           console.log("Success");
         }
+        const notifId = await makeRequest("POST", process.env.API_ENDPOINT + "/notifs/create-otn", {
+          title: "Welcome to ShaktiControl",
+          message: "You have successfully logged in to ShaktiControl.",
+          level: 1
+        });
+
+        if (!notifId || notifId.status === 404) {
+          console.error(notifId ? notifId.message : "Server Error");
+        } else {
+          console.log("Notification created successfully with ID:", notifId.data.notif.id);
+          await makeRequest("POST", process.env.API_ENDPOINT + "/notifs/assign", {
+            notificationId: notifId.data.notif.id,
+            emails: [email],
+          });
+        }
       }
     } catch (e) {
       console.log(e);

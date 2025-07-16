@@ -54,6 +54,10 @@ async function handleRequest(req: NextRequest, method: "GET" | "POST" | "PUT") {
     "/api/uvapi/services/enabled": `/services/enabled/${discordId}`,
     "/api/uvapi/services/toggle": `/services/toggle`,
     "/api/uvapi/services/all": `/services/all`,
+    "/api/uvapi/notifs/unread": `/notifs/unread/${discordId}`,
+    "/api/uvapi/notifs/mark-read": `/notifs/mark-read/${discordId}`,
+    "/api/uvapi/notifs/mark-all-read": `/notifs/mark-all-read/${discordId}`,
+
   } as const;
 
   const routesRequireAdmin = {
@@ -68,6 +72,13 @@ async function handleRequest(req: NextRequest, method: "GET" | "POST" | "PUT") {
     "/api/uvapi/projects/list": "/projects/list",
     "/api/uvapi/services/add": "/services/add",
     "/api/uvapi/services/adminall": "/services/alladmin",
+    "/api/uvapi/notifs/create": `/notifs/create`,
+    "/api/uvapi/notifs/assign": `/notifs/assign`,
+    "/api/uvapi/notifs/flush-otn": `/notifs/flush-otn`,
+    "/api/uvapi/notifs/creat-otn": `/notifs/create-otn`,
+    "/api/uvapi/notifs/assig-all": `/notifs/assign-all`,
+    "/api/uvapi/notifs/non-otn": `/notifs/non-otn`,
+    "/api/uvapi/notifs/delete": `/notifs/delete`,
   } as const;
 
   const routesWithEmailCheck = {

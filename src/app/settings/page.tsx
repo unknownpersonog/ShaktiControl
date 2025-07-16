@@ -43,11 +43,7 @@ export default function SettingsPage() {
 
       <main className={`flex-1 p-4 md:p-6 ${isMobile ? "pt-20" : ""}`}>
         <Header page="Settings" />
-        <Alert
-          title="Settings"
-          description="Customize your account preferences and security settings."
-          variant="default"
-        />
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           <ProfileSettings />
           <ServicesOverview />
