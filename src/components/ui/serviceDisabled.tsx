@@ -7,18 +7,15 @@ interface ServiceDisabledProps {
   serviceKey: string;
 }
 
-export default function ServiceDisabled({ 
+export default function ServiceDisabled({
   serviceName,
-  serviceKey 
+  serviceKey,
 }: ServiceDisabledProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
       <div className="max-w-md w-full text-center space-y-6">
-        
         <div className="space-y-3">
-          <h2 className="text-3xl font-bold bg-clip-text">
-            Service Disabled
-          </h2>
+          <h2 className="text-3xl font-bold bg-clip-text">Service Disabled</h2>
           <p className="text-gray-400 text-lg">
             {serviceName} is currently not enabled for your account
           </p>

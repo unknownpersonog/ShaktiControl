@@ -1,4 +1,11 @@
-import { Bell, X, CheckCheck, Check, BellRing, LoaderCircle } from "lucide-react";
+import {
+  Bell,
+  X,
+  CheckCheck,
+  Check,
+  BellRing,
+  LoaderCircle,
+} from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -6,7 +13,6 @@ import remarkMath from "remark-math";
 import rehypeRaw from "rehype-raw";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
-
 
 interface NotificationItem {
   id: number;
@@ -113,7 +119,6 @@ const Notification: React.FC = () => {
         )}
       </button>
 
-
       {/* 📥 Panel */}
       <div
         ref={panelRef}
@@ -142,7 +147,9 @@ const Notification: React.FC = () => {
               <LoaderCircle className="text-gray-300 animate-spin" />
             </div>
           ) : notifications.length === 0 ? (
-            <div className="text-center text-gray-500">No new notifications.</div>
+            <div className="text-center text-gray-500">
+              No new notifications.
+            </div>
           ) : (
             notifications.map((n) => {
               const isLong = n.message.length > 120;
@@ -153,10 +160,14 @@ const Notification: React.FC = () => {
                 >
                   <div className="flex justify-between items-center mb-1">
                     <span className="text-xs text-gray-300 rounded px-1 bg-gray-800/40">
-                      {n.createdAt ? new Date(n.createdAt).toLocaleString() : ""}
+                      {n.createdAt
+                        ? new Date(n.createdAt).toLocaleString()
+                        : ""}
                     </span>
                     {n.level === 3 && (
-                      <span className="text-xs px-2 py-0.5 rounded bg-red-600 text-white">CRITICAL</span>
+                      <span className="text-xs px-2 py-0.5 rounded bg-red-600 text-white">
+                        CRITICAL
+                      </span>
                     )}
                   </div>
 
@@ -164,7 +175,11 @@ const Notification: React.FC = () => {
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
                       <div className="text-gray-100 font-semibold whitespace-pre-wrap">
-                        {n.title ? n.title : isLong ? n.message.slice(0, 100) + "..." : n.message}
+                        {n.title
+                          ? n.title
+                          : isLong
+                            ? n.message.slice(0, 100) + "..."
+                            : n.message}
                       </div>
                       {n.title && (
                         <div className="text-gray-300 text-sm whitespace-pre-wrap rounded">
@@ -218,11 +233,15 @@ const Notification: React.FC = () => {
                   : ""}
               </span>
               {modalNotif.level === 3 && (
-                <span className="text-xs px-2 py-0.5 rounded bg-red-600 text-white">CRITICAL</span>
+                <span className="text-xs px-2 py-0.5 rounded bg-red-600 text-white">
+                  CRITICAL
+                </span>
               )}
             </div>
             {modalNotif.title && (
-              <h2 className="text-xl font-semibold text-gray-100 mb-2">{modalNotif.title}</h2>
+              <h2 className="text-xl font-semibold text-gray-100 mb-2">
+                {modalNotif.title}
+              </h2>
             )}
             <div className="prose prose-invert max-w-none text-gray-300 mb-6">
               <ReactMarkdown
@@ -231,7 +250,6 @@ const Notification: React.FC = () => {
               >
                 {modalNotif.message}
               </ReactMarkdown>
-
             </div>
             <button
               className="mt-2 px-4 py-2 bg-orange-500 hover:bg-orange-400 text-white text-sm rounded"

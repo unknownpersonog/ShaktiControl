@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 
 export async function POST(req: NextRequest) {
   const { message } = await req.json();
   const apiKey = process.env.GEMINI_API_KEY;
-  
+
   if (!apiKey) {
-    return NextResponse.json({ error: 'API key missing' }, { status: 500 });
+    return NextResponse.json({ error: "API key missing" }, { status: 500 });
   }
 
   const ai = new GoogleGenAI({ apiKey });

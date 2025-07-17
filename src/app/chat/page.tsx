@@ -57,7 +57,7 @@ export default function ChatPage() {
           <ChatInterface />
         ) : (
           <div className="flex-1 flex items-center justify-center p-4">
-            <ServiceDisabled 
+            <ServiceDisabled
               serviceName="AI Expansion"
               serviceKey="ai_expansion"
             />

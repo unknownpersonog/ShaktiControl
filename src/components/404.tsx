@@ -6,7 +6,6 @@ export default function NotFoundPage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-black">
       <div className="border border-gray-700 rounded-2xl p-8 backdrop-blur-md bg-black/40 shadow-2xl shadow-red-900/30 max-w-md w-full transition-all duration-300 hover:shadow-red-500/20">
-        
         <h1 className="text-4xl font-bold text-center text-red-500 mb-2 tracking-tight">
           404
         </h1>
@@ -16,7 +15,8 @@ export default function NotFoundPage() {
         </h2>
 
         <p className="text-sm text-gray-300 text-center mb-6 font-mono px-4">
-          The page you're looking for isn't available. It might have been moved, deleted, or never existed.
+          The page you're looking for isn't available. It might have been moved,
+          deleted, or never existed.
         </p>
 
         <div className="flex justify-center">

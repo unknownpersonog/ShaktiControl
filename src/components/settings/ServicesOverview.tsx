@@ -12,12 +12,14 @@ interface Service {
 }
 
 export default function ServicesOverview() {
-  const [services, setServices] = useState<(Service & { enabled: boolean })[]>([]);
+  const [services, setServices] = useState<(Service & { enabled: boolean })[]>(
+    [],
+  );
   const [modalOpen, setModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { data: session } = useSession();
-  
+
   useEffect(() => {
     const fetchAll = async () => {
       setIsLoading(true);
@@ -30,33 +32,43 @@ export default function ServicesOverview() {
         const allServices = allRes?.data?.data?.services;
         const userServices = userRes?.data?.data?.services;
 
-        if (allRes?.status === 200 && userRes?.status === 200 && Array.isArray(allServices)) {
+        if (
+          allRes?.status === 200 &&
+          userRes?.status === 200 &&
+          Array.isArray(allServices)
+        ) {
           // Create a set of enabled service keys
           const userServiceKeys = new Set(
-            Array.isArray(userServices) 
-              ? userServices.map((svc: Service) => svc.key) 
-              : []
+            Array.isArray(userServices)
+              ? userServices.map((svc: Service) => svc.key)
+              : [],
           );
-          
+
           // Map all services and add the enabled property
           const merged = allServices.map((svc: Service) => ({
             ...svc,
             enabled: svc.alwaysEnabled || userServiceKeys.has(svc.key),
           }));
-          
+
           setServices(merged);
         } else {
-          console.error("Invalid response from service endpoints", allRes, userRes);
+          console.error(
+            "Invalid response from service endpoints",
+            allRes,
+            userRes,
+          );
           setError("Failed to load services data. Please try again later.");
         }
       } catch (err) {
         console.error("Error fetching services", err);
-        setError("An error occurred while fetching services. Please try again later.");
+        setError(
+          "An error occurred while fetching services. Please try again later.",
+        );
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     fetchAll();
   }, []);
 
@@ -74,7 +86,9 @@ export default function ServicesOverview() {
 
       if (res && res.status === 200) {
         setServices((prev) =>
-          prev.map((svc) => (svc.key === key ? { ...svc, enabled: newState } : svc))
+          prev.map((svc) =>
+            svc.key === key ? { ...svc, enabled: newState } : svc,
+          ),
         );
       } else {
         console.error("Failed to toggle service", res?.message || res);
@@ -88,7 +102,9 @@ export default function ServicesOverview() {
 
   return (
     <div className="w-full border rounded-lg p-4 border-gray-600 shadow-md h-full flex flex-col">
-      <h2 className="text-lg font-semibold text-white mb-4">Services Overview</h2>
+      <h2 className="text-lg font-semibold text-white mb-4">
+        Services Overview
+      </h2>
 
       {isLoading ? (
         <div className="flex-grow flex items-center justify-center">
@@ -111,7 +127,9 @@ export default function ServicesOverview() {
           ))}
         </ul>
       ) : (
-        <p className="text-gray-300 text-sm mb-4">No services are currently enabled.</p>
+        <p className="text-gray-300 text-sm mb-4">
+          No services are currently enabled.
+        </p>
       )}
 
       <button
@@ -125,10 +143,14 @@ export default function ServicesOverview() {
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
           <div className="bg-black border border-gray-600 p-6 rounded-lg w-full max-w-lg shadow-xl">
-            <h3 className="text-white text-lg font-semibold mb-4">Manage Services</h3>
+            <h3 className="text-white text-lg font-semibold mb-4">
+              Manage Services
+            </h3>
 
             <div className="mb-4">
-              <h4 className="text-sm text-orange-300 font-medium mb-2">Always Enabled</h4>
+              <h4 className="text-sm text-orange-300 font-medium mb-2">
+                Always Enabled
+              </h4>
               {services.filter((svc) => svc.alwaysEnabled).length > 0 ? (
                 <ul className="space-y-2">
                   {services
@@ -139,17 +161,23 @@ export default function ServicesOverview() {
                         className="flex justify-between items-center p-3 bg-white/5 border border-gray-500 rounded"
                       >
                         <span className="text-white text-sm">{svc.name}</span>
-                        <span className="text-xs text-green-400">Always On</span>
+                        <span className="text-xs text-green-400">
+                          Always On
+                        </span>
                       </li>
                     ))}
                 </ul>
               ) : (
-                <p className="text-gray-300 text-sm">No always-enabled services.</p>
+                <p className="text-gray-300 text-sm">
+                  No always-enabled services.
+                </p>
               )}
             </div>
 
             <div>
-              <h4 className="text-sm text-orange-300 font-medium mb-2">Optional Services</h4>
+              <h4 className="text-sm text-orange-300 font-medium mb-2">
+                Optional Services
+              </h4>
               {services.filter((svc) => !svc.alwaysEnabled).length > 0 ? (
                 <ul className="space-y-2">
                   {services
@@ -168,7 +196,9 @@ export default function ServicesOverview() {
                     ))}
                 </ul>
               ) : (
-                <p className="text-gray-300 text-sm">No optional services available.</p>
+                <p className="text-gray-300 text-sm">
+                  No optional services available.
+                </p>
               )}
             </div>
 

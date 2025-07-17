@@ -57,7 +57,6 @@ async function handleRequest(req: NextRequest, method: "GET" | "POST" | "PUT") {
     "/api/uvapi/notifs/unread": `/notifs/unread/${discordId}`,
     "/api/uvapi/notifs/mark-read": `/notifs/mark-read/${discordId}`,
     "/api/uvapi/notifs/mark-all-read": `/notifs/mark-all-read/${discordId}`,
-
   } as const;
 
   const routesRequireAdmin = {

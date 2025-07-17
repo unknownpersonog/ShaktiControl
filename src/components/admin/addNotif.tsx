@@ -34,7 +34,9 @@ const NotificationAdminModal = ({
     setLoading(true);
     setError(null);
     try {
-      const endpoint = otn ? "/api/uvapi/notifs/creat-otn" : "/api/uvapi/notifs/create";
+      const endpoint = otn
+        ? "/api/uvapi/notifs/creat-otn"
+        : "/api/uvapi/notifs/create";
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -93,7 +95,9 @@ const NotificationAdminModal = ({
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center">
       <div className="bg-[#111] rounded-xl p-6 w-full max-w-lg shadow-xl border border-gray-700">
-        <h2 className="text-xl font-bold mb-4 text-white">Create Notification</h2>
+        <h2 className="text-xl font-bold mb-4 text-white">
+          Create Notification
+        </h2>
 
         <div className="space-y-4">
           <div>
@@ -140,7 +144,9 @@ const NotificationAdminModal = ({
               disabled={loading}
               id="otn"
             />
-            <label htmlFor="otn" className="text-gray-300">One-Time Notification (OTN)</label>
+            <label htmlFor="otn" className="text-gray-300">
+              One-Time Notification (OTN)
+            </label>
           </div>
 
           <div>
@@ -173,7 +179,9 @@ const NotificationAdminModal = ({
 
           {assignType === "specific" && (
             <div>
-              <label className="block text-gray-300 mb-1">Emails (comma-separated)</label>
+              <label className="block text-gray-300 mb-1">
+                Emails (comma-separated)
+              </label>
               <input
                 className="w-full p-2 rounded bg-gray-800 border border-gray-700 text-gray-100"
                 type="text"

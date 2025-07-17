@@ -107,7 +107,10 @@ const NotificationManagementTable = () => {
                       <Trash2 size={16} />
                     </button>
                     {/* Future edit button */}
-                    <button className="text-yellow-400 hover:text-yellow-600" disabled>
+                    <button
+                      className="text-yellow-400 hover:text-yellow-600"
+                      disabled
+                    >
                       <Pencil size={16} />
                     </button>
                   </td>

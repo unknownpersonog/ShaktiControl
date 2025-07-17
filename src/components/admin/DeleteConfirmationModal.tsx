@@ -31,9 +31,7 @@ const DeleteConfirmationModal = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm">
       <div className="bg-gray-800 p-6 w-full max-w-md rounded-lg border border-gray-300">
-        <h2 className="text-xl font-bold mb-4 text-gray-200">
-          Confirm Delete
-        </h2>
+        <h2 className="text-xl font-bold mb-4 text-gray-200">Confirm Delete</h2>
         <p className="text-white mb-4">
           Are you sure you want to delete this {itemToDelete?.type}? This action
           cannot be undone.

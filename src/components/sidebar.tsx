@@ -20,7 +20,7 @@ import {
   User,
   Coins,
   Store,
-  Bot
+  Bot,
 } from "lucide-react";
 import ProfileModal from "@/components/ui/ProfileModal"; // Import ProfileModal
 import { useApiInfo } from "@/context/ApiInfoProvider";

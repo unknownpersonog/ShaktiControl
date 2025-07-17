@@ -128,10 +128,14 @@ const UserTable: React.FC<UserTableProps> = ({
                 </td>
                 <td className="px-4 py-2">{user.email}</td>
                 <td className="px-4 py-2">
-                  {(user.method === "Google" || "Discord") ? (
+                  {user.method === "Google" || "Discord" ? (
                     <div className="flex items-center">
                       <img
-                        src={user.method.charAt(0).toLowerCase() + user.method.slice(1) + ".png"}
+                        src={
+                          user.method.charAt(0).toLowerCase() +
+                          user.method.slice(1) +
+                          ".png"
+                        }
                         alt={user.method}
                         className="w-5 h-5 mr-2"
                       />

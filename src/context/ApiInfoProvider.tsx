@@ -58,7 +58,9 @@ export const ApiInfoProvider = ({
   }, [status, session]); // Re-run when session changes
 
   return (
-    <ApiInfoContext.Provider value={{ userData, loading, error, refreshUserData }}>
+    <ApiInfoContext.Provider
+      value={{ userData, loading, error, refreshUserData }}
+    >
       {children}
     </ApiInfoContext.Provider>
   );

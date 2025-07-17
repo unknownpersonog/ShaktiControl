@@ -78,7 +78,9 @@ const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
     direction: "ascending",
   });
 
-  const [activeTab, setActiveTab] = useState<"user" | "vps" | "os" | "service" | "notifications">("user");
+  const [activeTab, setActiveTab] = useState<
+    "user" | "vps" | "os" | "service" | "notifications"
+  >("user");
 
   useEffect(() => {
     if (activeTab === "user") fetchUsers();

@@ -1,17 +1,21 @@
-import React from 'react';
-import { useSession } from 'next-auth/react';
-import SettingsCard from './SettingsCard';
-import Image from 'next/image';
-import { useApiInfo } from '@/context/ApiInfoProvider';
+import React from "react";
+import { useSession } from "next-auth/react";
+import SettingsCard from "./SettingsCard";
+import Image from "next/image";
+import { useApiInfo } from "@/context/ApiInfoProvider";
 
 const ProfileSettings = () => {
   const { data: session } = useSession();
   const { userData } = useApiInfo();
-  const method = (session?.user?.image || "").includes("discord") ? "Discord" : "Google";
+  const method = (session?.user?.image || "").includes("discord")
+    ? "Discord"
+    : "Google";
 
   return (
     <div className="w-full border rounded-lg p-4 border-gray-600 shadow-md">
-      <h2 className="text-lg font-semibold text-white mb-4">Account Information</h2>
+      <h2 className="text-lg font-semibold text-white mb-4">
+        Account Information
+      </h2>
 
       <div className="flex items-center space-x-4 mb-6 bg-white/5 rounded border border-gray-500 p-2">
         {session?.user?.image && (

@@ -10,9 +10,9 @@ const Header = ({
 }: any) => {
   const [showNotifModal, setShowNotifModal] = useState(false);
 
-	const handleNotifCreated = () => {
-    setShowNotifModal(false)
-  }
+  const handleNotifCreated = () => {
+    setShowNotifModal(false);
+  };
   return (
     <header className="flex justify-between items-center p-4">
       <h1 className="text-2xl font-bold text-gray-100">Admin Dashboard</h1>

@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { GoogleGenAI } from "@google/genai";
 import { Send, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";          // ← remove this line if you don’t need GFM
+import remarkGfm from "remark-gfm"; // ← remove this line if you don’t need GFM
 
 type Message = {
   role: "user" | "assistant";
@@ -22,14 +22,17 @@ export default function ChatInterface() {
   const scrollToBottom = () =>
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 
-  useEffect(scrollToBottom, [messages]);          // auto-scroll on new message
+  useEffect(scrollToBottom, [messages]); // auto-scroll on new message
   useEffect(() => inputRef.current?.focus(), []); // focus input on mount
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
-    setMessages((p) => [...p, { role: "user", content: input, timestamp: new Date() }]);
+    setMessages((p) => [
+      ...p,
+      { role: "user", content: input, timestamp: new Date() },
+    ]);
     setInput("");
     setIsLoading(true);
 
@@ -43,12 +46,20 @@ export default function ChatInterface() {
       const data = await response.json();
       const text = data.text ?? "";
 
-      setMessages((p) => [...p, { role: "assistant", content: text, timestamp: new Date() }]);
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : "An unknown error occurred";
       setMessages((p) => [
         ...p,
-        { role: "assistant", content: `Sorry, I encountered an error: ${msg}`, timestamp: new Date() },
+        { role: "assistant", content: text, timestamp: new Date() },
+      ]);
+    } catch (err) {
+      const msg =
+        err instanceof Error ? err.message : "An unknown error occurred";
+      setMessages((p) => [
+        ...p,
+        {
+          role: "assistant",
+          content: `Sorry, I encountered an error: ${msg}`,
+          timestamp: new Date(),
+        },
       ]);
     }
     setIsLoading(false);
@@ -59,11 +70,13 @@ export default function ChatInterface() {
 
   return (
     <div className="flex flex-col h-screen bg-black/5 backdrop-blur-lg border border-white/10 rounded-xl shadow-xl">
-
       {/* Chat body */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map((m, i) => (
-          <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+          <div
+            key={i}
+            className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+          >
             <div
               className={`max-w-[70%] rounded-2xl p-4 relative group ${
                 m.role === "user"
@@ -73,25 +86,33 @@ export default function ChatInterface() {
             >
               {m.role === "assistant" ? (
                 <div className="whitespace-pre-wrap">
-                <ReactMarkdown
-                  // delete the next line if you removed the import above
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    a: (props) => <a {...props} className="text-pink-400 underline" />,
-                    code: ({ inline, children, ...props } : any) =>
-                      inline ? (
-                        <code {...props} className="bg-white/10 px-1 py-0.5 rounded">
-                          {children}
-                        </code>
-                      ) : (
-                        <pre {...props} className="bg-black/20 p-3 rounded overflow-x-auto">
-                          <code>{children}</code>
-                        </pre>
+                  <ReactMarkdown
+                    // delete the next line if you removed the import above
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      a: (props) => (
+                        <a {...props} className="text-pink-400 underline" />
                       ),
-                  }}
-                >
-                  {m.content}
-                </ReactMarkdown>
+                      code: ({ inline, children, ...props }: any) =>
+                        inline ? (
+                          <code
+                            {...props}
+                            className="bg-white/10 px-1 py-0.5 rounded"
+                          >
+                            {children}
+                          </code>
+                        ) : (
+                          <pre
+                            {...props}
+                            className="bg-black/20 p-3 rounded overflow-x-auto"
+                          >
+                            <code>{children}</code>
+                          </pre>
+                        ),
+                    }}
+                  >
+                    {m.content}
+                  </ReactMarkdown>
                 </div>
               ) : (
                 m.content

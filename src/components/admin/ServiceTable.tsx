@@ -101,7 +101,9 @@ export default function ServiceAdminPage() {
                 <input
                   type="checkbox"
                   checked={form.alwaysEnabled}
-                  onChange={(e) => setForm({ ...form, alwaysEnabled: e.target.checked })}
+                  onChange={(e) =>
+                    setForm({ ...form, alwaysEnabled: e.target.checked })
+                  }
                 />
                 <span className="text-sm">Always Enabled</span>
               </label>
@@ -129,8 +131,19 @@ export default function ServiceAdminPage() {
       {showSuccessModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
           <div className="bg-green-600 text-white px-6 py-4 rounded-lg flex items-center gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
             </svg>
             <span>Service added successfully!</span>
           </div>

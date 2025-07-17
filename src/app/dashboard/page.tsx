@@ -9,12 +9,12 @@ import { User, Bell, HardDrive, Cpu, MemoryStick } from "lucide-react";
 import LoadingComponent from "@/components/loading";
 import Sidebar from "@/components/sidebar";
 import Alert from "@/components/ui/alert";
-import ServerStatusCard from "@/components/ServerStatusCard";
+import ServerStatusCard from "@/components/dashboard/ServerStatusCard";
 import Header from "@/components/Header";
-import ResourceCard from "@/components/ResourceCard";
+import ResourceCard from "@/components/dashboard/ResourceCard";
 import Footer from "@/components/Footer";
-import OSServicesList from "@/components/OSServicesList";
-import ActivityList from "@/components/ActivityList";
+import OSServicesList from "@/components/dashboard/OSServicesList";
+import ActivityList from "@/components/dashboard/ActivityList";
 import FeatureBox from "@/components/FeatureBox";
 
 // Constants
@@ -96,7 +96,6 @@ export default function DashboardPage() {
   if (userDataLoading) {
     return <LoadingComponent />;
   }
-
 
   const path = usePathname();
 
