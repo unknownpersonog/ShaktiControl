@@ -2,6 +2,8 @@ import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import Discord from "next-auth/providers/discord";
 import { makeRequest } from "@/functions/api/makeRequest";
+import { serverLogEvent } from "@/functions/api/loggerServer";
+// import { logEvent } from "@/functions/api/logger"; // Remove this import if logEvent is in this file
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google, Discord],
@@ -51,6 +53,36 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       // Allow sign in
       return true;
+    },
+  },
+  events: {
+    async signIn({ user, account, profile }) {
+      // Log login activity here
+      if (user?.email) {
+        const method = (user.image || "").includes("discord")
+          ? "Discord"
+          : "Google";
+        await serverLogEvent(
+          user.email, // uid
+          `Logged in using ${method}`, // event
+          {}, // extraData
+        );
+      } else {
+         console.error("Missing user identifier for logging after sign-in event");
+      }
+    },
+    async signOut(message) {
+      // Log logout activity here
+      if (message && 'token' in message && message.token?.email) { // Use type guard
+        console.log("User signed out:", message.token.email);
+        await serverLogEvent(
+          message.token.email as string, // uid
+          `Logged out`, // event
+          {}, // extraData
+        );
+      } else {
+        console.error("Missing user identifier for logging after sign-out event");
+      }
     },
   },
 });

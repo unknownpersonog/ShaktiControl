@@ -10,8 +10,13 @@
   },
   "dependencies": {
     "@google/genai": "^0.15.0",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/supabase-js": "^2.52.0",
     "axios": "^1.7.7",
     "date-fns": "^3.6.0",
+    "fabric": "^6.7.0",
+    "fabricjs-react": "^2.1.0",
+    "firebase": "^12.0.0",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.428.0",
     "next": "^14.2.28",

@@ -14,6 +14,10 @@ const DeleteConfirmationModal = ({
       if (itemToDelete.type === "user") {
         endpoint = "/api/uvapi/users/delete";
         payload = { email: itemToDelete.id };
+        const deleteLogsEndpoint = `/api/log/delete`;
+        const deleteLogsPayload = { userId: itemToDelete.id };
+
+        await makeRequest("POST", deleteLogsEndpoint, deleteLogsPayload);
       } else {
         endpoint = "/api/uvapi/vps/delete";
         payload = { vpsId: itemToDelete.id };

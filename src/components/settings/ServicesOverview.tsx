@@ -4,6 +4,7 @@ import ToggleSwitch from "@/components/ui/ToggleSwitch";
 import { makeRequest } from "@/functions/api/makeRequest";
 import { useSession } from "next-auth/react";
 import { LoaderCircle } from "lucide-react";
+import { logEvent } from "@/functions/api/logger";
 
 interface Service {
   key: string;
@@ -96,6 +97,8 @@ export default function ServicesOverview() {
     } catch (err) {
       console.error("Error toggling service", err);
     }
+    logEvent(`Service ${key} ${newState ? "enabled" : "disabled"}`);
+
   };
 
   const enabledServices = services.filter((svc) => svc.enabled);

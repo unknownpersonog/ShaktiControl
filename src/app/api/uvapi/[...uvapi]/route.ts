@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { auth } from "../../../../../auth"; // Adjust the import based on your setup
+import { auth } from "../../../../lib/auth"; // Adjust the import based on your setup
 import type { Session } from "next-auth";
 
 const API_BASE_URL = process.env.API_ENDPOINT;

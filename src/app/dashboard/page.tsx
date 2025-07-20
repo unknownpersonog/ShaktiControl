@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { redirect, usePathname } from "next/navigation";
 import { useApiInfo } from "@/context/ApiInfoProvider";
 import { makeRequest } from "@/functions/api/makeRequest";
-import { User, Bell, HardDrive, Cpu, MemoryStick } from "lucide-react";
+import { User, Bell, HardDrive, Cpu, MemoryStick, Server } from "lucide-react";
 import LoadingComponent from "@/components/loading";
 import Sidebar from "@/components/sidebar";
 import Alert from "@/components/ui/alert";
@@ -28,15 +28,9 @@ const borderColors = [
 ];
 
 const allocatedResources = [
-  { name: "RAM", icon: MemoryStick, value: "Undefined" },
-  { name: "CPU", icon: Cpu, value: "Undefined" },
-  { name: "Disk", icon: HardDrive, value: "Undefined" },
-];
-
-const recentActivities = [
-  { action: "Created new VPS", time: "2 hours ago" },
-  { action: "Updated project settings", time: "Yesterday" },
-  { action: "Deployed new application", time: "3 days ago" },
+  { name: "RAM", icon: MemoryStick, value: "0" + " GB"},
+  { name: "CPU", icon: Cpu, value: "0" + " Cores" },
+  { name: "Disk", icon: HardDrive, value: "0" + " GB" }
 ];
 
 const availableOS = [
@@ -69,7 +63,9 @@ export default function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [serverStatus, setServerStatus] = useState({ API: "Offline" });
   const [isMobile, setIsMobile] = useState(false);
-
+  const [recentActivities, setRecentActivities] = useState<
+    { action: string; time: string }[]
+  >([]); 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -77,7 +73,32 @@ export default function DashboardPage() {
 
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        const res = await fetch("/api/log/read");
+        if (!res.ok) throw new Error("Failed to fetch logs");
+        const data = await res.json();
 
+        const formatted = (data.logs || []).map((log: any) => ({
+          action: log.event || "Unknown Event",
+          time: new Date(log.timestamp).toLocaleString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+            day: "numeric",
+            month: "short",
+          }),
+        }));
+
+        setRecentActivities(formatted);
+      } catch (err) {
+        console.error("Failed to load recent activities:", err);
+      }
+    };
+
+    fetchLogs();
+  }, []);
   useEffect(() => {
     const fetchServerStatus = async () => {
       try {
