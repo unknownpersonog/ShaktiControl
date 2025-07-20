@@ -37,7 +37,6 @@ export async function POST(req: NextRequest) {
       userRef,
       {
         email: session.user?.email || null,
-        name: session.user?.name || null,
         createdAt: serverTimestamp(),
       },
       { merge: true }
