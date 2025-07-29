@@ -11,7 +11,7 @@ import {
   ChevronRight,
   Mail,
   Calendar,
-  Users,
+  Layout,
   Briefcase,
   Globe,
   X,
@@ -22,7 +22,7 @@ import {
   Store,
   Bot,
 } from "lucide-react";
-import ProfileModal from "@/components/ui/ProfileModal"; // Import ProfileModal
+import ProfileModal from "@/components/ui/ProfileModal";
 import { useApiInfo } from "@/context/ApiInfoProvider";
 
 const sidebarItems = [
@@ -31,7 +31,7 @@ const sidebarItems = [
   { name: "Earn", icon: Coins },
   { name: "Store", icon: Store },
   { name: "Calendar", icon: Calendar },
-  { name: "Users", icon: Users },
+  { name: "Boards", icon: Layout, href: "/board/manage" },
   { name: "Projects", icon: Briefcase },
   { name: "Chat", icon: Bot },
   { name: "Settings", icon: Settings },
@@ -44,9 +44,10 @@ interface SidebarProps {
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   const [isMobile, setIsMobile] = useState(false);
-  const [showProfileModal, setShowProfileModal] = useState(false); // State to control modal visibility
-  const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const { userData, loading: userDataLoading, error } = useApiInfo();
   const isAdmin = userData?.data?.admin === "true";
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -61,6 +62,11 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   const allSidebarItems = isAdmin
     ? [...sidebarItems, { name: "Admin", icon: Shield }]
     : sidebarItems;
+
+  // Helper function to get the correct URL for each item
+  const getItemUrl = (item: any) => {
+    return item.href || `/${item.name.toLowerCase()}`;
+  };
 
   return (
     <>
@@ -107,7 +113,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               {allSidebarItems.map((item) => (
                 <li key={item.name}>
                   <Link
-                    href={`/${item.name.toLowerCase()}`}
+                    href={getItemUrl(item)}
                     className={`
                       flex items-center py-2 px-2 rounded text-gray-300
                       hover:bg-gray-200 hover:text-gray-900 transition-colors
@@ -129,7 +135,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
         <div className="p-4">
           <div
-            onClick={() => setShowProfileModal(true)} // Open modal on click
+            onClick={() => setShowProfileModal(true)}
             className={`
               flex items-center justify-center py-2 px-4 rounded
               text-gray-300 border border-gray-300
