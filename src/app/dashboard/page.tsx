@@ -118,12 +118,6 @@ export default function DashboardPage() {
     return <LoadingComponent />;
   }
 
-  const path = usePathname();
-
-  if (path !== "/dashboard") {
-    return null; // or redirect to the correct page
-  }
-
   return (
     <div className="flex min-h-screen text-white relative">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />

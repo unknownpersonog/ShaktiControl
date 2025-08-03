@@ -2,7 +2,7 @@
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 
-export default async function Login() {
+export default function Login() {
   return (
     <main className="min-h-screen flex items-center justify-center">
       <div className="border border-gray-600 rounded-xl p-6 backdrop-blur-md bg-black/50 shadow-gray-700 shadow-lg max-w-md hover:shadow-white/20 transition-all duration-300">
