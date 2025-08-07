@@ -1,6 +1,6 @@
-import { Board } from '@/components/board/WhiteboardPage';
-import BoardCard from './BoardCard';
-import EmptyBoardsState from './EmptyBoardsState';
+import { Board } from "@/components/board/WhiteboardPage";
+import BoardCard from "./BoardCard";
+import EmptyBoardsState from "./EmptyBoardsState";
 
 interface BoardsGridProps {
   boards: Board[];
@@ -10,12 +10,12 @@ interface BoardsGridProps {
   onCreateBoard: () => void;
 }
 
-export default function BoardsGrid({ 
-  boards, 
-  onDeleteBoard, 
-  onRenameBoard, 
-  onOpenBoard, 
-  onCreateBoard 
+export default function BoardsGrid({
+  boards,
+  onDeleteBoard,
+  onRenameBoard,
+  onOpenBoard,
+  onCreateBoard,
 }: BoardsGridProps) {
   if (boards.length === 0) {
     return <EmptyBoardsState onCreateBoard={onCreateBoard} />;
@@ -23,7 +23,7 @@ export default function BoardsGrid({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {boards.map(board => (
+      {boards.map((board) => (
         <BoardCard
           key={board.id}
           board={board}

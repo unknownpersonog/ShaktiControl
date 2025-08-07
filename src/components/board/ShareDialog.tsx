@@ -1,5 +1,5 @@
-'use client';
-import React from 'react';
+"use client";
+import React from "react";
 
 interface ShareDialogProps {
   shareLink: string;
@@ -11,7 +11,9 @@ const ShareDialog: React.FC<ShareDialogProps> = ({ shareLink, onClose }) => (
     <div className="bg-gray-800 rounded-lg p-6 w-96 border border-gray-700">
       <h3 className="text-lg font-semibold mb-4">Share Whiteboard</h3>
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2 text-gray-300">Shareable Link</label>
+        <label className="block text-sm font-medium mb-2 text-gray-300">
+          Shareable Link
+        </label>
         <div className="flex">
           <input
             type="text"

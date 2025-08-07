@@ -30,7 +30,7 @@ export async function serverLogEvent(
           email: uid,
           createdAt: serverTimestamp(),
         },
-        { merge: true }
+        { merge: true },
       );
 
       await addDoc(logsCollection, logEntry);

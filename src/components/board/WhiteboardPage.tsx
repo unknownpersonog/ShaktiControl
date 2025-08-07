@@ -1,17 +1,37 @@
-'use client';
-import React, { useState, useEffect, useRef } from 'react';
-import { useSession } from 'next-auth/react';
-import Toolbar from './Toolbar';
-import UsersPanel from './UsersPanel';
-import ShareDialog from './ShareDialog';
-import CanvasBoard from './CanvasBoard';
-import { db } from '@/lib/firebase';
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import { useSession } from "next-auth/react";
+import Toolbar from "./Toolbar";
+import UsersPanel from "./UsersPanel";
+import ShareDialog from "./ShareDialog";
+import CanvasBoard from "./CanvasBoard";
+import { db } from "@/lib/firebase";
 import {
-  collection, doc, onSnapshot, setDoc, addDoc, query, where, getDocs, serverTimestamp, writeBatch,
-} from 'firebase/firestore';
-import { Delete, Download, Lock, RemoveFormatting, Share, Share2, Users } from 'lucide-react';
+  collection,
+  doc,
+  onSnapshot,
+  setDoc,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  serverTimestamp,
+  writeBatch,
+} from "firebase/firestore";
+import {
+  Delete,
+  Download,
+  Lock,
+  RemoveFormatting,
+  Share,
+  Share2,
+  Users,
+} from "lucide-react";
 
-export interface Point { x: number; y: number; }
+export interface Point {
+  x: number;
+  y: number;
+}
 export interface Element {
   id?: string;
   type: string;
@@ -34,31 +54,49 @@ export interface Board {
   };
 }
 
-const DOMAIN_URL = 'https://client.unknownvps.eu.org/board';
+const DOMAIN_URL = "https://client.unknownvps.eu.org/board";
 
 // Helper function to generate unique anonymous ID (client-side only)
 const generateAnonymousId = () => {
-  if (typeof window === 'undefined') return 'anonymous_temp';
-  
-  const stored = localStorage.getItem('anonymousUserId');
+  if (typeof window === "undefined") return "anonymous_temp";
+
+  const stored = localStorage.getItem("anonymousUserId");
   if (stored) return stored;
-  
+
   const newId = `anonymous_${Math.random().toString(36).slice(2, 11)}_${Date.now()}`;
-  localStorage.setItem('anonymousUserId', newId);
+  localStorage.setItem("anonymousUserId", newId);
   return newId;
 };
 
 // Helper function to generate anonymous name (client-side only)
 const generateAnonymousName = () => {
-  if (typeof window === 'undefined') return 'Anonymous User';
-  
-  const stored = localStorage.getItem('anonymousUserName');
+  if (typeof window === "undefined") return "Anonymous User";
+
+  const stored = localStorage.getItem("anonymousUserName");
   if (stored) return stored;
-  
-  const adjectives = ['Quick', 'Bright', 'Cool', 'Swift', 'Smart', 'Bold', 'Calm', 'Kind'];
-  const animals = ['Fox', 'Wolf', 'Bear', 'Lion', 'Eagle', 'Tiger', 'Shark', 'Hawk'];
+
+  const adjectives = [
+    "Quick",
+    "Bright",
+    "Cool",
+    "Swift",
+    "Smart",
+    "Bold",
+    "Calm",
+    "Kind",
+  ];
+  const animals = [
+    "Fox",
+    "Wolf",
+    "Bear",
+    "Lion",
+    "Eagle",
+    "Tiger",
+    "Shark",
+    "Hawk",
+  ];
   const name = `${adjectives[Math.floor(Math.random() * adjectives.length)]} ${animals[Math.floor(Math.random() * animals.length)]}`;
-  localStorage.setItem('anonymousUserName', name);
+  localStorage.setItem("anonymousUserName", name);
   return name;
 };
 
@@ -72,20 +110,23 @@ const WhiteboardPage: React.FC = () => {
   useEffect(() => {
     setIsClient(true);
   }, []);
-  
-  
+
   // Use Firebase user ID for all operations
-  const currentUserId = session?.user?.email || (isClient ? generateAnonymousId() : 'anonymous_temp');
-  const currentUserName = session?.user?.name || (isClient ? generateAnonymousName() : 'Anonymous User');
+  const currentUserId =
+    session?.user?.email ||
+    (isClient ? generateAnonymousId() : "anonymous_temp");
+  const currentUserName =
+    session?.user?.name ||
+    (isClient ? generateAnonymousName() : "Anonymous User");
   const isAnonymous = !session?.user?.email;
-  
-  const [boardId, setBoardId] = useState('');
+
+  const [boardId, setBoardId] = useState("");
   const [board, setBoard] = useState<Board | null>(null);
   const [elements, setElements] = useState<Element[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [cursors, setCursors] = useState<Record<string, Point>>({});
-  const [currentTool, setCurrentTool] = useState('pen');
-  const [strokeColor, setStrokeColor] = useState('#ffffff');
+  const [currentTool, setCurrentTool] = useState("pen");
+  const [strokeColor, setStrokeColor] = useState("#ffffff");
   const [strokeWidth, setStrokeWidth] = useState(2);
   const [fill, setFill] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
@@ -93,14 +134,15 @@ const WhiteboardPage: React.FC = () => {
 
   // Permissions
   const isAdmin = board?.adminId === currentUserId;
-  const isEditor = isAdmin || board?.permissions?.editors?.includes(currentUserId);
+  const isEditor =
+    isAdmin || board?.permissions?.editors?.includes(currentUserId);
 
   // Initialization
   useEffect(() => {
     if (!currentUserId || !db || !isClient) return;
     const urlParams = new URLSearchParams(window.location.search);
-    const shareToken = urlParams.get('share');
-    const existingBoardId = urlParams.get('board');
+    const shareToken = urlParams.get("share");
+    const existingBoardId = urlParams.get("board");
     if (shareToken) joinBoardByToken(shareToken);
     else if (existingBoardId) setBoardId(existingBoardId);
     else if (!isAnonymous) createBoard(); // Only logged-in users can create boards
@@ -119,28 +161,32 @@ const WhiteboardPage: React.FC = () => {
     // Set user as online when joining
     const setUserOnline = async () => {
       try {
-        await setDoc(doc(db, 'boards', boardId, 'users', currentUserId), {
+        await setDoc(doc(db, "boards", boardId, "users", currentUserId), {
           name: currentUserName,
           color: `hsl(${Math.random() * 360}, 70%, 55%)`,
           isOnline: true,
           isAnonymous: isAnonymous,
           joinedAt: serverTimestamp(),
-          lastSeen: serverTimestamp()
+          lastSeen: serverTimestamp(),
         });
       } catch (error) {
-        console.error('Error setting user online:', error);
+        console.error("Error setting user online:", error);
       }
     };
 
     // Set user as offline
     const setUserOffline = async () => {
       try {
-        await setDoc(doc(db, 'boards', boardId, 'users', currentUserId), {
-          isOnline: false,
-          lastSeen: serverTimestamp()
-        }, { merge: true });
+        await setDoc(
+          doc(db, "boards", boardId, "users", currentUserId),
+          {
+            isOnline: false,
+            lastSeen: serverTimestamp(),
+          },
+          { merge: true },
+        );
       } catch (error) {
-        console.error('Error setting user offline:', error);
+        console.error("Error setting user offline:", error);
       }
     };
 
@@ -149,12 +195,16 @@ const WhiteboardPage: React.FC = () => {
     // Start heartbeat - update lastSeen every 15 seconds (more frequent)
     heartbeatRef.current = setInterval(async () => {
       try {
-        await setDoc(doc(db, 'boards', boardId, 'users', currentUserId), {
-          lastSeen: serverTimestamp(),
-          isOnline: true // Ensure online status is maintained
-        }, { merge: true });
+        await setDoc(
+          doc(db, "boards", boardId, "users", currentUserId),
+          {
+            lastSeen: serverTimestamp(),
+            isOnline: true, // Ensure online status is maintained
+          },
+          { merge: true },
+        );
       } catch (error) {
-        console.error('Heartbeat error:', error);
+        console.error("Heartbeat error:", error);
       }
     }, 30000);
 
@@ -174,34 +224,36 @@ const WhiteboardPage: React.FC = () => {
 
     const cleanupOfflineUsers = async () => {
       try {
-        const usersSnapshot = await getDocs(collection(db, 'boards', boardId, 'users'));
+        const usersSnapshot = await getDocs(
+          collection(db, "boards", boardId, "users"),
+        );
         const batch = writeBatch(db);
         const now = Date.now();
         let hasUpdates = false;
-        
+
         usersSnapshot.docs.forEach((userDoc) => {
           const userData = userDoc.data();
           // Skip if no lastSeen or user is already offline
           if (!userData.lastSeen || !userData.isOnline) return;
-          
+
           try {
             const lastSeen = userData.lastSeen.toDate().getTime();
-            
+
             // Mark as offline if no heartbeat for 2 minutes (4 missed heartbeats)
             if (now - lastSeen > 120000) {
               batch.update(userDoc.ref, { isOnline: false });
               hasUpdates = true;
             }
           } catch (error) {
-            console.error('Error processing user timestamp:', error);
+            console.error("Error processing user timestamp:", error);
           }
         });
-        
+
         if (hasUpdates) {
           await batch.commit();
         }
       } catch (error) {
-        console.error('Error cleaning up offline users:', error);
+        console.error("Error cleaning up offline users:", error);
       }
     };
 
@@ -219,7 +271,7 @@ const WhiteboardPage: React.FC = () => {
   useEffect(() => {
     if (!boardId || !db) return;
     const elementsUnsubscribe = onSnapshot(
-      collection(db, 'boards', boardId, 'elements'),
+      collection(db, "boards", boardId, "elements"),
       (snapshot) => {
         const newElements: Element[] = [];
         snapshot.forEach((doc) => {
@@ -227,10 +279,10 @@ const WhiteboardPage: React.FC = () => {
         });
         newElements.sort((a, b) => a.timestamp - b.timestamp);
         setElements(newElements);
-      }
+      },
     );
     const cursorsUnsubscribe = onSnapshot(
-      collection(db, 'boards', boardId, 'cursors'),
+      collection(db, "boards", boardId, "cursors"),
       (snapshot) => {
         const newCursors: Record<string, Point> = {};
         snapshot.forEach((doc) => {
@@ -240,12 +292,12 @@ const WhiteboardPage: React.FC = () => {
           }
         });
         setCursors(newCursors);
-      }
+      },
     );
     const usersUnsubscribe = onSnapshot(
       query(
-        collection(db, 'boards', boardId, 'users'),
-        where('isOnline', '==', true)
+        collection(db, "boards", boardId, "users"),
+        where("isOnline", "==", true),
       ),
       (snapshot) => {
         const newUsers: any[] = [];
@@ -253,37 +305,42 @@ const WhiteboardPage: React.FC = () => {
           newUsers.push({ id: doc.id, ...doc.data() });
         });
         setUsers(newUsers);
-      }
+      },
     );
     const boardUnsubscribe = onSnapshot(
-      doc(db, 'boards', boardId),
+      doc(db, "boards", boardId),
       (docSnap) => {
         if (docSnap.exists()) {
           setBoard({ id: docSnap.id, ...docSnap.data() } as Board);
         }
-      }
+      },
     );
-    return () => { elementsUnsubscribe(); cursorsUnsubscribe(); usersUnsubscribe(); boardUnsubscribe(); };
+    return () => {
+      elementsUnsubscribe();
+      cursorsUnsubscribe();
+      usersUnsubscribe();
+      boardUnsubscribe();
+    };
     // eslint-disable-next-line
   }, [boardId, currentUserId]);
 
   const createBoard = async () => {
     if (!db || !currentUserId || isAnonymous) return;
     const newBoard = {
-      name: 'New Whiteboard',
+      name: "New Whiteboard",
       adminId: currentUserId,
       shareToken: Math.random().toString(36).slice(2, 11),
       createdAt: serverTimestamp(),
-      permissions: { editors: [currentUserId] }
+      permissions: { editors: [currentUserId] },
     };
-    const ref = await addDoc(collection(db, 'boards'), newBoard);
+    const ref = await addDoc(collection(db, "boards"), newBoard);
     setBoardId(ref.id);
     setBoard({ ...newBoard, id: ref.id } as Board);
   };
 
   const joinBoardByToken = async (token: string) => {
     if (!db) return;
-    const q = query(collection(db, 'boards'), where('shareToken', '==', token));
+    const q = query(collection(db, "boards"), where("shareToken", "==", token));
     const snapshot = await getDocs(q);
     if (!snapshot.empty) {
       const boardDoc = snapshot.docs[0];
@@ -295,12 +352,15 @@ const WhiteboardPage: React.FC = () => {
   const clearBoard = async () => {
     if (!db || !boardId) return;
     const batch = writeBatch(db);
-    const elementsSnapshot = await getDocs(collection(db, 'boards', boardId, 'elements'));
-    elementsSnapshot.docs.forEach(docSnap => batch.delete(docSnap.ref));
+    const elementsSnapshot = await getDocs(
+      collection(db, "boards", boardId, "elements"),
+    );
+    elementsSnapshot.docs.forEach((docSnap) => batch.delete(docSnap.ref));
     await batch.commit();
   };
 
-  const exportBoard = () => window.dispatchEvent(new CustomEvent('export-board'));
+  const exportBoard = () =>
+    window.dispatchEvent(new CustomEvent("export-board"));
 
   const getShareLink = () => `${DOMAIN_URL}?share=${board?.shareToken}`;
 
@@ -322,8 +382,12 @@ const WhiteboardPage: React.FC = () => {
       <div className="h-screen flex items-center justify-center bg-gray-900 text-white">
         <div className="text-center">
           <h2 className="text-xl font-semibold mb-2">Join a Whiteboard</h2>
-          <p className="mb-4">Anonymous users can only join existing whiteboards via share links.</p>
-          <p className="text-sm text-gray-400">Login to create your own whiteboards.</p>
+          <p className="mb-4">
+            Anonymous users can only join existing whiteboards via share links.
+          </p>
+          <p className="text-sm text-gray-400">
+            Login to create your own whiteboards.
+          </p>
         </div>
       </div>
     );
@@ -333,7 +397,9 @@ const WhiteboardPage: React.FC = () => {
     <div className="h-screen flex flex-col bg-gray-900 text-white">
       <div className="bg-black shadow border-b border-gray-700 p-4 flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <h1 className="text-xl font-semibold">{board?.name || 'Live Whiteboard'}</h1>
+          <h1 className="text-xl font-semibold">
+            {board?.name || "Live Whiteboard"}
+          </h1>
           {!isEditor && (
             <div className="flex items-center space-x-1 text-yellow-400 text-sm font-semibold">
               <Lock className="w-5 h-5" />
@@ -351,12 +417,32 @@ const WhiteboardPage: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-2">
-          <Users size={32} onClick={() => setShowUsers(!showUsers)} className="p-2 hover:bg-gray-800 rounded-lg" aria-label="Show Users" />
-          <Share2 size={32} onClick={() => setShowShare(true)} className="p-2 hover:bg-gray-800 rounded-lg" aria-label="Share" />
-          <Download size={32} onClick={exportBoard} className="p-2 hover:bg-gray-800 rounded-lg" aria-label="Download" />
+          <Users
+            size={32}
+            onClick={() => setShowUsers(!showUsers)}
+            className="p-2 hover:bg-gray-800 rounded-lg"
+            aria-label="Show Users"
+          />
+          <Share2
+            size={32}
+            onClick={() => setShowShare(true)}
+            className="p-2 hover:bg-gray-800 rounded-lg"
+            aria-label="Share"
+          />
+          <Download
+            size={32}
+            onClick={exportBoard}
+            className="p-2 hover:bg-gray-800 rounded-lg"
+            aria-label="Download"
+          />
           {isEditor && (
             <>
-              <RemoveFormatting size={32} onClick={clearBoard} className="p-2 hover:bg-red-900 text-red-400 rounded-lg" aria-label="Clear Board" />
+              <RemoveFormatting
+                size={32}
+                onClick={clearBoard}
+                className="p-2 hover:bg-red-900 text-red-400 rounded-lg"
+                aria-label="Clear Board"
+              />
             </>
           )}
         </div>
@@ -376,7 +462,7 @@ const WhiteboardPage: React.FC = () => {
           elements={elements}
           users={users}
           cursors={cursors}
-          currentTool={isEditor ? currentTool : ''}
+          currentTool={isEditor ? currentTool : ""}
           strokeColor={strokeColor}
           strokeWidth={strokeWidth}
           fill={fill}
@@ -385,9 +471,21 @@ const WhiteboardPage: React.FC = () => {
           currentUserId={currentUserId}
           canEdit={isEditor || false}
         />
-        {showUsers && <UsersPanel users={users} board={board} setBoard={setBoard} isAdmin={isAdmin} />}
+        {showUsers && (
+          <UsersPanel
+            users={users}
+            board={board}
+            setBoard={setBoard}
+            isAdmin={isAdmin}
+          />
+        )}
       </div>
-      {showShare && <ShareDialog shareLink={getShareLink()} onClose={() => setShowShare(false)} />}
+      {showShare && (
+        <ShareDialog
+          shareLink={getShareLink()}
+          onClose={() => setShowShare(false)}
+        />
+      )}
     </div>
   );
 };

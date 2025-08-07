@@ -26,7 +26,7 @@ export default function BoardPage() {
       // Only check service if user is authenticated
       if (status === "authenticated") {
         try {
-          setServiceState(prev => ({ ...prev, loading: true }));
+          setServiceState((prev) => ({ ...prev, loading: true }));
           const enabled = await isServiceEnabledByUser("boards");
           setServiceState({ loading: false, enabled, checked: true });
         } catch (error) {
@@ -53,13 +53,14 @@ export default function BoardPage() {
   }
 
   // If authenticated user but service is disabled
-  if (status === "authenticated" && serviceState.checked && !serviceState.enabled) {
+  if (
+    status === "authenticated" &&
+    serviceState.checked &&
+    !serviceState.enabled
+  ) {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">
-        <ServiceDisabled
-          serviceName="Boards"
-          serviceKey="boards"
-        />
+        <ServiceDisabled serviceName="Boards" serviceKey="boards" />
       </div>
     );
   }

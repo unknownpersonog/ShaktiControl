@@ -1,11 +1,14 @@
-export async function logEvent(event: string, extraData: Record<string, any> = {}) {
+export async function logEvent(
+  event: string,
+  extraData: Record<string, any> = {},
+) {
   try {
     const res = await fetch("/api/log", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ event, extraData })
+      body: JSON.stringify({ event, extraData }),
     });
 
     if (!res.ok) {

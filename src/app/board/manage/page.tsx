@@ -1,19 +1,27 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { redirect, useRouter } from 'next/navigation';
-import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
-import { Board } from '@/components/board/WhiteboardPage';
-import LoadingComponent from '@/components/loading';
-import StatsSection from '@/components/board/manage/StatsSection';
-import BoardsGrid from '@/components/board/manage/BoardsGrid';
-import { useApiInfo } from '@/context/ApiInfoProvider';
-import Header from '@/components/Header';
-import Sidebar from '@/components/sidebar';
-import Alert from '@/components/ui/alert';
-import { isServiceEnabledByUser } from '@/utils/serviceCheck';
-import ServiceDisabled from '@/components/ui/serviceDisabled';
+"use client";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
+import { db } from "@/lib/firebase";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  deleteDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { Board } from "@/components/board/WhiteboardPage";
+import LoadingComponent from "@/components/loading";
+import StatsSection from "@/components/board/manage/StatsSection";
+import BoardsGrid from "@/components/board/manage/BoardsGrid";
+import { useApiInfo } from "@/context/ApiInfoProvider";
+import Header from "@/components/Header";
+import Sidebar from "@/components/sidebar";
+import Alert from "@/components/ui/alert";
+import { isServiceEnabledByUser } from "@/utils/serviceCheck";
+import ServiceDisabled from "@/components/ui/serviceDisabled";
 
 export default function BoardManagement() {
   const { data: session, status } = useSession();
@@ -68,45 +76,47 @@ export default function BoardManagement() {
 
   const fetchUserBoards = async () => {
     if (!session?.user?.email) return;
-    
+
     try {
       const q = query(
-        collection(db, 'boards'),
-        where('adminId', '==', session.user.email)
+        collection(db, "boards"),
+        where("adminId", "==", session.user.email),
       );
       const snapshot = await getDocs(q);
-      const userBoards = snapshot.docs.map(doc => ({
+      const userBoards = snapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as Board[];
-      
+
       setBoards(userBoards);
     } catch (error) {
-      console.error('Error fetching boards:', error);
+      console.error("Error fetching boards:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const deleteBoard = async (boardId: string) => {
-    if (!confirm('Are you sure you want to delete this board?')) return;
-    
+    if (!confirm("Are you sure you want to delete this board?")) return;
+
     try {
-      await deleteDoc(doc(db, 'boards', boardId));
-      setBoards(boards.filter(board => board.id !== boardId));
+      await deleteDoc(doc(db, "boards", boardId));
+      setBoards(boards.filter((board) => board.id !== boardId));
     } catch (error) {
-      console.error('Error deleting board:', error);
+      console.error("Error deleting board:", error);
     }
   };
 
   const renameBoard = async (boardId: string, newName: string) => {
     try {
-      await updateDoc(doc(db, 'boards', boardId), { name: newName });
-      setBoards(boards.map(board => 
-        board.id === boardId ? { ...board, name: newName } : board
-      ));
+      await updateDoc(doc(db, "boards", boardId), { name: newName });
+      setBoards(
+        boards.map((board) =>
+          board.id === boardId ? { ...board, name: newName } : board,
+        ),
+      );
     } catch (error) {
-      console.error('Error renaming board:', error);
+      console.error("Error renaming board:", error);
     }
   };
 
@@ -115,7 +125,7 @@ export default function BoardManagement() {
   };
 
   const handleCreateBoard = () => {
-    router.push('/board');
+    router.push("/board");
   };
 
   if (loading && serviceState.enabled) {
@@ -130,7 +140,7 @@ export default function BoardManagement() {
 
       <main className={`flex-1 p-4 md:p-6 ${isMobile ? "pt-20" : ""}`}>
         <Header page="Board Management" />
-        
+
         {showBoardManagement ? (
           <>
             <Alert
@@ -138,15 +148,17 @@ export default function BoardManagement() {
               description="Manage your whiteboards and create new ones."
               variant="default"
             />
-            
+
             <div className="max-w-7xl mx-auto">
               {/* Stats Cards Row */}
               <StatsSection totalBoards={boards.length} />
 
               {/* Boards Section */}
               <div className="mb-6">
-                <h2 className="text-xl font-medium text-white mb-4">My Whiteboards</h2>
-                
+                <h2 className="text-xl font-medium text-white mb-4">
+                  My Whiteboards
+                </h2>
+
                 <BoardsGrid
                   boards={boards}
                   onDeleteBoard={deleteBoard}
@@ -159,10 +171,7 @@ export default function BoardManagement() {
           </>
         ) : (
           <div className="flex-1 flex items-center justify-center p-4">
-            <ServiceDisabled
-              serviceName="Boards"
-              serviceKey="boards"
-            />
+            <ServiceDisabled serviceName="Boards" serviceKey="boards" />
           </div>
         )}
       </main>

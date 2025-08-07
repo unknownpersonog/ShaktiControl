@@ -1,10 +1,11 @@
 {
   "name": "shaktictrl",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "private": true,
   "repository": {
     "type": "github",
-    "url": "https://github.com/unknownpersonog/ShaktiCtrl"},
+    "url": "https://github.com/unknownpersonog/ShaktiControl"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

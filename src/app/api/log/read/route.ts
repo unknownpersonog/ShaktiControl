@@ -18,7 +18,10 @@ export async function GET(req: NextRequest) {
 
   const uid = session.user?.email;
   if (!uid) {
-    return NextResponse.json({ error: "Missing user identifier" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing user identifier" },
+      { status: 400 },
+    );
   }
 
   try {
@@ -26,7 +29,7 @@ export async function GET(req: NextRequest) {
     const q = query(logsRef, orderBy("timestamp", "desc"), limit(3));
     const snapshot = await getDocs(q);
 
-    const logs = snapshot.docs.map(doc => {
+    const logs = snapshot.docs.map((doc) => {
       const data = doc.data();
       return {
         id: doc.id,

@@ -1,4 +1,4 @@
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon } from "lucide-react";
 
 interface StatsCardProps {
   icon: LucideIcon;
@@ -8,7 +8,13 @@ interface StatsCardProps {
   children?: React.ReactNode;
 }
 
-export default function StatsCard({ icon: Icon, iconColor, title, value, children }: StatsCardProps) {
+export default function StatsCard({
+  icon: Icon,
+  iconColor,
+  title,
+  value,
+  children,
+}: StatsCardProps) {
   return (
     <div className="bg-gray-600/10 border border-gray-800 rounded-lg p-6">
       <div className="flex items-center space-x-3 mb-2">

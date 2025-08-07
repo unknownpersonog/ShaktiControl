@@ -1,7 +1,7 @@
-'use client';
-import { useState } from 'react';
-import { Layout, Edit3, Trash2, Calendar, Hash } from 'lucide-react';
-import { Board } from '@/components/board/WhiteboardPage';
+"use client";
+import { useState } from "react";
+import { Layout, Edit3, Trash2, Calendar, Hash } from "lucide-react";
+import { Board } from "@/components/board/WhiteboardPage";
 
 interface BoardCardProps {
   board: Board;
@@ -10,7 +10,12 @@ interface BoardCardProps {
   onClick: () => void;
 }
 
-export default function BoardCard({ board, onDelete, onRename, onClick }: BoardCardProps) {
+export default function BoardCard({
+  board,
+  onDelete,
+  onRename,
+  onClick,
+}: BoardCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(board.name);
 
@@ -29,13 +34,13 @@ export default function BoardCard({ board, onDelete, onRename, onClick }: BoardC
           <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
             <Layout className="w-5 h-5 text-white" />
           </div>
-          
+
           {isEditing ? (
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               onBlur={handleRename}
-              onKeyPress={(e) => e.key === 'Enter' && handleRename()}
+              onKeyPress={(e) => e.key === "Enter" && handleRename()}
               className="bg-transparent border-b border-blue-500 text-white text-lg font-medium outline-none"
               autoFocus
               onClick={(e) => e.stopPropagation()}
@@ -46,7 +51,7 @@ export default function BoardCard({ board, onDelete, onRename, onClick }: BoardC
             </h3>
           )}
         </div>
-        
+
         {/* Action Buttons */}
         <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
@@ -80,7 +85,7 @@ export default function BoardCard({ board, onDelete, onRename, onClick }: BoardC
             <span className="text-gray-500 text-sm">Created</span>
           </div>
           <span className="text-gray-400 text-sm">
-            {board.createdAt?.toDate?.()?.toLocaleDateString() || 'Unknown'}
+            {board.createdAt?.toDate?.()?.toLocaleDateString() || "Unknown"}
           </span>
         </div>
         <div className="flex items-center justify-between">

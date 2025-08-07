@@ -98,7 +98,6 @@ export default function ServicesOverview() {
       console.error("Error toggling service", err);
     }
     logEvent(`Service ${key} ${newState ? "enabled" : "disabled"}`);
-
   };
 
   const enabledServices = services.filter((svc) => svc.enabled);

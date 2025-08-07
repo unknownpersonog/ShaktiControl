@@ -1,12 +1,12 @@
-'use client';
-import React from 'react';
-import { Pen, Eraser, Square, Circle, Home } from 'lucide-react';
+"use client";
+import React from "react";
+import { Pen, Eraser, Square, Circle, Home } from "lucide-react";
 
 const tools = [
-  { tool: 'pen', icon: Pen },
-  { tool: 'eraser', icon: Eraser },
-  { tool: 'rectangle', icon: Square },
-  { tool: 'circle', icon: Circle },
+  { tool: "pen", icon: Pen },
+  { tool: "eraser", icon: Eraser },
+  { tool: "rectangle", icon: Square },
+  { tool: "circle", icon: Circle },
 ];
 
 interface ToolbarProps {
@@ -24,7 +24,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   strokeColor,
   setStrokeColor,
   strokeWidth,
-  setStrokeWidth
+  setStrokeWidth,
 }) => (
   <div className="w-16 bg-black border-r border-gray-800 flex flex-col items-center py-4 space-y-2">
     {/* Tool Buttons */}
@@ -35,9 +35,10 @@ const Toolbar: React.FC<ToolbarProps> = ({
           title={tool.charAt(0).toUpperCase() + tool.slice(1)}
           onClick={() => setCurrentTool(tool)}
           className={`p-3 rounded-xl transition-all duration-200 flex items-center justify-center relative group
-            ${currentTool === tool 
-              ? 'bg-white text-black shadow-lg' 
-              : 'hover:bg-gray-800 text-gray-400 hover:text-white'
+            ${
+              currentTool === tool
+                ? "bg-white text-black shadow-lg"
+                : "hover:bg-gray-800 text-gray-400 hover:text-white"
             }`}
         >
           <Icon className="w-5 h-5" />
@@ -67,11 +68,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
       {/* Stroke Width Indicator */}
       <div className="flex flex-col items-center space-y-2">
         <div className="text-xs text-gray-500 font-medium">{strokeWidth}</div>
-        <div 
+        <div
           className="bg-white rounded-full transition-all"
-          style={{ 
-            width: `${Math.max(4, strokeWidth)}px`, 
-            height: `${Math.max(4, strokeWidth)}px` 
+          style={{
+            width: `${Math.max(4, strokeWidth)}px`,
+            height: `${Math.max(4, strokeWidth)}px`,
           }}
         ></div>
       </div>
@@ -85,9 +86,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
           value={strokeWidth}
           onChange={(e) => setStrokeWidth(Number(e.target.value))}
           className="w-2 h-20 bg-gray-700 rounded-lg appearance-none cursor-pointer"
-          style={{ 
-            writingMode: 'vertical-lr' as const,
-            WebkitAppearance: 'slider-vertical'
+          style={{
+            writingMode: "vertical-lr" as const,
+            WebkitAppearance: "slider-vertical",
           }}
           title={`Stroke Width: ${strokeWidth}px`}
         />
@@ -100,7 +101,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
     {/* Home Button - Distinguished from other tools */}
     <div className="mt-auto pt-4 border-t border-gray-800">
       <button
-        onClick={() => window.location.href = '/'}
+        onClick={() => (window.location.href = "/")}
         title="Home"
         className="p-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
       >

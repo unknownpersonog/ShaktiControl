@@ -28,9 +28,9 @@ const borderColors = [
 ];
 
 const allocatedResources = [
-  { name: "RAM", icon: MemoryStick, value: "0" + " GB"},
+  { name: "RAM", icon: MemoryStick, value: "0" + " GB" },
   { name: "CPU", icon: Cpu, value: "0" + " Cores" },
-  { name: "Disk", icon: HardDrive, value: "0" + " GB" }
+  { name: "Disk", icon: HardDrive, value: "0" + " GB" },
 ];
 
 const availableOS = [
@@ -65,7 +65,7 @@ export default function DashboardPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [recentActivities, setRecentActivities] = useState<
     { action: string; time: string }[]
-  >([]); 
+  >([]);
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();

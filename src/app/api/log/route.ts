@@ -19,7 +19,10 @@ export async function POST(req: NextRequest) {
   const { event, extraData } = await req.json();
   const uid = session.user?.email;
   if (!uid) {
-    return NextResponse.json({ error: "Missing user identifier" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing user identifier" },
+      { status: 400 },
+    );
   }
 
   const userRef = doc(db, "users", uid);
@@ -39,7 +42,7 @@ export async function POST(req: NextRequest) {
         email: session.user?.email || null,
         createdAt: serverTimestamp(),
       },
-      { merge: true }
+      { merge: true },
     );
 
     // Create new log in subcollection

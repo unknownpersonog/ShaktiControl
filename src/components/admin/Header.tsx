@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Menu, X, Plus, Bell, Mail, Shield } from "lucide-react";
+import { Menu, X, Plus, Bell, Mail, Shield, Info } from "lucide-react";
 import NotificationAdminModal from "./addNotif";
+import VersionModal from "./versionModal";
 
 const Header = ({
   sidebarOpen,
@@ -9,6 +10,7 @@ const Header = ({
   setShowAddVpsModal,
 }: any) => {
   const [showNotifModal, setShowNotifModal] = useState(false);
+  const [isVersionModalOpen, setIsVersionModalOpen] = useState(false);
 
   const handleNotifCreated = () => {
     setShowNotifModal(false);
@@ -23,8 +25,11 @@ const Header = ({
         >
           <Plus size={20} />
         </button>
-        <button className="p-2 rounded-full bg-gray-700 hover:bg-gray-600">
-          <Mail size={20} />
+        <button
+          onClick={() => setIsVersionModalOpen(true)}
+          className="p-2 rounded-full bg-gray-700 hover:bg-gray-600"
+        >
+          <Info size={20} />
         </button>
         <button
           className="p-2 rounded-full bg-gray-700 hover:bg-gray-600"
@@ -43,6 +48,10 @@ const Header = ({
         open={showNotifModal}
         onClose={() => setShowNotifModal(false)}
         onCreated={handleNotifCreated}
+      />
+      <VersionModal
+        isOpen={isVersionModalOpen}
+        onClose={() => setIsVersionModalOpen(false)}
       />
     </header>
   );

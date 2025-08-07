@@ -79,12 +79,12 @@ const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
   });
 
   const [activeTab, setActiveTab] = useState<
-    "user" | "vps" | "os" | "service" | "notifications"
-  >("user");
+    "Users" | "VPS" | "os" | "Services" | "Notifications"
+  >("Users");
 
   useEffect(() => {
-    if (activeTab === "user") fetchUsers();
-    if (activeTab === "vps") fetchVpsList();
+    if (activeTab === "Users") fetchUsers();
+    if (activeTab === "VPS") fetchVpsList();
   }, [activeTab]);
 
   const fetchUsers = async () => {
@@ -191,7 +191,7 @@ const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
             <div className="flex items-center justify-center h-full">
               <LoaderCircle className="animate-spin h-8 w-8 text-gray-200" />
             </div>
-          ) : activeTab === "user" ? (
+          ) : activeTab === "Users" ? (
             <UserTable
               users={sortedUsers}
               selectedUsers={selectedUsers}
@@ -201,16 +201,16 @@ const AdminDashboard = ({ userData, session }: AdminDashboardProps) => {
               setEditUser={handleEditUser}
               handleIndividualDelete={handleIndividualDelete}
             />
-          ) : activeTab === "vps" ? (
+          ) : activeTab === "VPS" ? (
             <VpsTable
               vpsList={sortedVps}
               setSelectedVps={setSelectedVps}
               setShowEditVpsModal={setShowEditVpsModal}
               setShowDeleteConfirmation={setShowDeleteConfirmation}
             />
-          ) : activeTab === "service" ? (
+          ) : activeTab === "Services" ? (
             <ServiceAdminPage />
-          ) : activeTab === "notifications" ? (
+          ) : activeTab === "Notifications" ? (
             <NotificationManagementTable />
           ) : (
             <div className="p-6 rounded-lg border border-gray-300 bg-opacity-50 backdrop-blur-lg">
