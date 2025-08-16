@@ -13,7 +13,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
   const { data: session, status } = useSession(); // Session for authentication
   const { userData, loading: userDataLoading, error } = useApiInfo(); // userData from context
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 backdrop-blur-sm">
       <div className="bg-opacity-90 border border-gray-300 bg-black text-green-400 rounded-lg p-6 w-full max-w-lg relative shadow-lg font-mono">
         {/* Close Button */}
         <button

@@ -16,7 +16,7 @@ const VersionModal: React.FC<VersionModalProps> = ({ isOpen, onClose }) => {
           <div className="order-2 sm:order-1 border-t border-gray-600 sm:border-t-0 sm:border-r sm:border-r-gray-600 flex flex-col items-center justify-center p-4">
             <div className="rounded-xl flex items-center justify-center shadow-lg mb-3">
               <img
-                src="/shaktictrl_transparent.png"
+                src="/lightning.png"
                 alt="ShaktiCtrl Logo"
                 className="w-32 h-32 object-contain rounded-lg"
               />
